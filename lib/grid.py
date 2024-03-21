@@ -43,7 +43,7 @@ class Grid:
         Return:
             None
             """
-        self.state[self.row_dict[row]][column - 1] = 'S'
+        self.state[self.row_dict[row]][int(column) - 1] = 'S'
 
     def display_game_board(self):
         """Render game grid with column and row labels as a text block"""

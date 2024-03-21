@@ -1,6 +1,4 @@
-from grid import Grid
+from game import Game
 
-x = Grid()
-x.display_game_board()
-x.change_grid('A', 1, 'X')
-
+x = Game()
+x.play()
