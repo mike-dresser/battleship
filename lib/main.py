@@ -2,26 +2,27 @@
 The game state is represented by a list of lists, where
 each list is a row on the board.
 grid = [
-        [ o, o, o, o, o ],
-        [ o, o, o, o, o ],
-        [ o, o, o, o, o ],
-        [ o, o, o, o, o ],
-        [ o, o, o, o, o ],
-        [ o, o, o, o, o ]
+        [ ·, ·, ·, ·, · ],
+        [ ·, ·, ·, ·, · ],
+        [ ·, ·, ·, ·, · ],
+        [ ·, ·, ·, ·, · ],
+        [ ·, ·, ·, ·, · ],
+        [ ·, ·, ·, ·, · ]
         ]
 
 An individual square can be addressed grid[a][b] where a 
 is the row index, and b is the column index.
 """
 
-
-grid = [
-        [ 'o', 'o', 'o', 'o', 'o' ],
-        [ 'o', 'o', 'o', 'o', 'o' ],
-        [ 'o', 'o', 'o', 'o', 'o' ],
-        [ 'o', 'o', 'o', 'o', 'o' ],
-        [ 'o', 'o', 'o', 'o', 'o' ]
-        ]
+def create_new_grid():
+    grid = [
+            [ '·', '·', '·', '·', '·' ],
+            [ '·', '·', '·', '·', '·' ],
+            [ '·', '·', '·', '·', '·' ],
+            [ '·', '·', '·', '·', '·' ],
+            [ '·', '·', '·', '·', '·' ]
+            ]
+    return grid
 
 def display_game_board(grid):
     """Render game grid with column and row labels as a text block"""
@@ -42,4 +43,18 @@ def display_game_board(grid):
         row_counter += 1
     return output
 
-print(display_game_board(grid))     
+def change_grid(grid, row, column, symbol):
+    """Change a grid square to a different symbol"""
+    row_dict = { 'A': 0,
+                    'B': 1,
+                    'C': 2,
+                    'D': 3,
+                    'E': 4}
+    grid[row_dict[row]][int(column) - 1] = symbol
+    return grid
+    
+x = create_new_grid()
+print(display_game_board(x))
+change_grid(x, 'A', 1, 'X')
+change_grid(x, 'B', 2, 'O')
+print(display_game_board(x))
