@@ -1,6 +1,6 @@
 # Battleship
 The Phase 3 project of Brent, Raff, and Mike.
-
+```
   1 | 2 | 3 | 4 | 5 | 6 
 A
 B
@@ -8,6 +8,7 @@ C
 D
 E
 F
+```
 
 
 ## Project Phase 1
