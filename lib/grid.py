@@ -20,9 +20,7 @@ class Grid:
 
     @classmethod
     def reset_grid(cls):
-        """Set game state to starting position
-        
-        Next goal: set to arbitrary size and fill symbol"""
+        """Set game state to starting position"""
         grid = [
                 [ '·', '·', '·', '·', '·' ],
                 [ '·', '·', '·', '·', '·' ],
@@ -54,12 +52,12 @@ class Grid:
         """Change a grid square to a different symbol
         
         Parameters:
-        row (str):           a row by letter name (i.e. 'A')
-        column (int | str):  a column number
-        symbol (str):       the symbol to replace the grid square with
+            row (str):           a row by letter name (i.e. 'A')
+            column (int | str):  a column number
+            symbol (str):        the symbol to replace the grid square with
 
         Return value:
-        None.
+            None
         """
         row_dict = { 'A': 0,'B': 1,'C': 2,'D': 3,'E': 4}
         self.state[row_dict[row]][int(column) - 1] = symbol
