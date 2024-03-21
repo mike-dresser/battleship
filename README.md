@@ -39,10 +39,10 @@ Computer returns Fire
 Random to start.
 
 If Player ship count reaches zero
-Print Victory
+Print Game Over 
 
 If Opponent ship count reaches zero
-Print Gamer Over
+Print Victory
 
 ## Project Phase 3
 
