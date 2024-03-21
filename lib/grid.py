@@ -19,7 +19,7 @@ class Grid:
         self.state = type(self).reset_grid()
         self.column_labels = ['1', '2', '3', '4', '5']
         self.row_labels = ['A', 'B', 'C', 'D', 'E']
-        self.row_dict = { 'A': 0,'B': 1,'C': 2,'D': 3,'E': 4}
+        self.row_dict = { 'A': 0,'B': 1,'C': 2,'D': 3,'E': 4} # convert row letters to indexes
 
     @classmethod
     def reset_grid(cls):
@@ -37,19 +37,17 @@ class Grid:
         """Place a ship on game grid
         
         Parameters:
-            row (str):          the row letter
-            column(int | str):  column number
+            row (str):        row letter
+            column(int|str):  column number
 
         Return:
             None
-            """
+        """
         self.state[self.row_dict[row]][int(column) - 1] = 'S'
 
     def display_game_board(self):
-        """Render game grid with column and row labels as a text block"""
-        
+        """Render game grid with column and row labels as a text block"""     
         output = '   '
-
         for label in self.column_labels:
             output += label + '|'
         output += '\n'
@@ -66,11 +64,11 @@ class Grid:
         """Change a grid square to a different symbol
         
         Parameters:
-            row (str):           a row by letter name (i.e. 'A')
-            column (int | str):  a column number
-            symbol (str):        the symbol to replace the grid square with
+            row (str):         row by letter name (i.e. 'A')
+            column (int|str):  column number
+            symbol (str):      the symbol to replace the grid square with
 
-        Return value:
+        Return:
             None
         """
         
