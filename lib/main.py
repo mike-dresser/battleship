@@ -53,6 +53,8 @@ def change_grid(grid, row, column, symbol):
     grid[row_dict[row]][int(column) - 1] = symbol
     return grid
     
+
+
 x = create_new_grid()
 print(display_game_board(x))
 change_grid(x, 'A', 1, 'X')
