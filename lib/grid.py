@@ -17,6 +17,9 @@ class Grid:
 
     def __init__(self) -> None:
         self.state = type(self).reset_grid()
+        self.column_labels = ['1', '2', '3', '4', '5']
+        self.row_labels = ['A', 'B', 'C', 'D', 'E']
+        self.row_dict = { 'A': 0,'B': 1,'C': 2,'D': 3,'E': 4}
 
     @classmethod
     def reset_grid(cls):
@@ -29,19 +32,30 @@ class Grid:
                 [ '·', '·', '·', '·', '·' ]
                 ]
         return grid
+    
+    def place_ship(self, row, column):
+        """Place a ship on game grid
+        
+        Parameters:
+            row (str):          the row letter
+            column(int | str):  column number
+
+        Return:
+            None
+            """
+        self.state[self.row_dict[row]][int(column) - 1] = 'S'
 
     def display_game_board(self):
         """Render game grid with column and row labels as a text block"""
-        column_labels = ['1', '2', '3', '4', '5']
-        row_labels = ['A', 'B', 'C', 'D', 'E']
+        
         output = '   '
 
-        for label in column_labels:
+        for label in self.column_labels:
             output += label + '|'
         output += '\n'
         row_counter = 0
         for row in self.state:
-            output += f'{row_labels[row_counter]}  '
+            output += f'{self.row_labels[row_counter]}  '
             for grid_square in row:
                 output += f'{grid_square} '
             output += '\n' 
@@ -59,6 +73,6 @@ class Grid:
         Return value:
             None
         """
-        row_dict = { 'A': 0,'B': 1,'C': 2,'D': 3,'E': 4}
-        self.state[row_dict[row]][int(column) - 1] = symbol
+        
+        self.state[self.row_dict[row]][int(column) - 1] = symbol
         self.display_game_board()
