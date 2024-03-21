@@ -44,7 +44,17 @@ def display_game_board(grid):
     return output
 
 def change_grid(grid, row, column, symbol):
-    """Change a grid square to a different symbol"""
+    """Change a grid square to a different symbol
+    
+    Parameters:
+    grid (list):         grid from create_new_grid function
+    row (str):           a row by letter name (i.e. 'A')
+    column (int | str):  a column number
+    symbold (str):       the symbol to replace the grid square with
+
+    Return value:
+    A nested list.
+    """
     row_dict = { 'A': 0,
                     'B': 1,
                     'C': 2,
@@ -54,9 +64,9 @@ def change_grid(grid, row, column, symbol):
     return grid
     
 
-
-x = create_new_grid()
-print(display_game_board(x))
-change_grid(x, 'A', 1, 'X')
-change_grid(x, 'B', 2, 'O')
-print(display_game_board(x))
+# """Code for testing"""
+# x = create_new_grid()
+# print(display_game_board(x))
+# change_grid(x, 'A', 1, 'X')
+# change_grid(x, 'B', 2, 'O')
+# print(display_game_board(x))
