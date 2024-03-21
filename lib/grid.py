@@ -74,3 +74,7 @@ class Grid:
         
         self.state[self.row_dict[row]][int(column) - 1] = symbol
         self.display_game_board()
+
+    def query_position(self, row, column):
+            """Return the current value for a grid position"""
+            return self.state[self.row_dict[row]][int(column) - 1]

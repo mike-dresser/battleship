@@ -5,15 +5,15 @@ class Game:
     """Class to represent the current game"""
 
     def __init__(self):
-        self.ships_placed = False
-        self.game_over = False
-        self.player_grid = Grid()
+        self.player_grid = Grid() 
+        # eventually we will have a computer grid as well
     
     def play(self):
         """Begin new game"""
 
+        os.system('clear')
         print('~ ~ ~  B A T T L E S H I P  ~ ~ ~\n\n')
-        print('The year is 2024. Oceans are battlefields.')
+        print('The year is 2024. Oceans are battlefields.\n')
     
         self.player_grid.display_game_board()
         self.place_ships()
@@ -22,10 +22,13 @@ class Game:
         print('Begin by placing your 1x1 ships on the game board.\n')
         placed_ships = 0
         while placed_ships < 3:
-            print(f'{3 - placed_ships} remaining.\n')
+            print(f'*** {3 - placed_ships} ships remaining ***\n')
             pos = Game.get_position_input('Position for your ship (i.e. "B2") ')
             os.system('clear')
-
+            if self.player_grid.query_position(pos[0], pos[1]) == 'S':
+                self.player_grid.display_game_board()
+                print('\nCannot place a ship on top of another!\n')
+                continue
             self.player_grid.place_ship(pos[0], pos[1])
             placed_ships += 1
             self.player_grid.display_game_board()
@@ -33,10 +36,11 @@ class Game:
 
     @classmethod
     def get_position_input(cls, message):
-        """Ensure player input is a valid position
+        """Ensure player input is a valid two-character string like 'A1', case-insensitive.
         
         Parameters:
-            message (str): be a two-character string like 'A1', case-insensitive.
+            message (str): display message for input field
+
         Return:
             str (length 2)
         """
