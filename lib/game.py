@@ -1,27 +1,72 @@
 from grid import Grid
 import os
+import random
+from time import sleep
+
+
 
 class Game:
     """Class to represent the current game"""
 
     def __init__(self):
         self.player_grid = Grid() 
-        # eventually we will have a computer grid as well
-    
+        self.cpu_grid = Grid() 
+
+
     def play(self):
         """Begin new game"""
+        play_again = True
+        while play_again:
+            '''for right now I have the while loop on the whole play() but I think we should figure out a more efficient way
+            Enables the "P to play again" at the end of a game'''
 
-        os.system('clear')
-        print('~ ~ ~  B A T T L E S H I P  ~ ~ ~\n\n')
-        print('The year is 2024. Oceans are battlefields.\n')
-    
-        self.player_grid.display_game_board()
-        self.place_ships()
+            os.system('clear')
+            print('The year is 2024. Oceans are battlefields.\n')
+            print(''' 
+                (          (       ) (   (    (     
+            (  )\ )  *   ))\ ) ( /( )\ ))\ ) )\ )  
+            ( )\(()/(` )  /(()/( )\()|()/(()/((()/(  
+            )((_)/(_))( )(_))(_)|(_)\ /(_))(_))/(_)) 
+            ((_)_(_)) (_(_()|_))  _((_|_))(_)) (_))   
+            | _ )_ _||_   _/ __|| || |_ _| _ \/ __|  
+            | _ \| |   | | \__ \| __ || ||  _/\__ \  
+            |___/___|  |_| |___/|_||_|___|_|  |___/
+            _________________________________________
+            ''')
+        
+            print("~~HARBOR~~")
+            self.player_grid.display_game_board()
+            self.place_ships()
+            print("~~BATTLEFIELD~~")
+            self.cpu_grid.cpu_ship_placement()
+            self.cpu_grid.display_game_board()
+            
+            '''battle_on() checking for any ship on either grid'''
+            while self.battle_on(self.player_grid) and self.battle_on(self.cpu_grid):
+                self.take_player_shot()
+                input("Press any key to continue...")
+
+                if not self.battle_on(self.cpu_grid):
+                    print("Congratulations! You win!")
+                    break
+
+                self.take_cpu_shot()
+                input("Press any key to continue...")
+                if not self.battle_on(self.player_grid):
+                    print("Sorry, you lose!")
+                    break
+            
+            play_again_input = input("Press 'P' to play again, or any other key to exit: ")
+            if play_again_input.lower() != 'p':
+                play_again = False
+
 
     def place_ships(self):
+     
         print('Begin by placing your 1x1 ships on the game board.\n')
         placed_ships = 0
         while placed_ships < 3:
+        
             print(f'*** {3 - placed_ships} ships remaining ***\n')
             pos = Game.get_position_input('Position for your ship (i.e. "B2") ')
             os.system('clear')
@@ -64,5 +109,101 @@ class Game:
             accepted = True
         return result
 
-
     
+    ##-Outline for Player Fire
+    
+    def take_player_shot(self):
+        os.system('clear')
+        print("~~HARBOR~~")
+        self.player_grid.display_game_board()
+        # print("~~BATTLEFIELD~~")
+        # self.cpu_grid.display_game_board()
+        
+        print('''
+  _____ _   _  _____     _   ___ __  __ 
+ |_   _/_\ | |/ | __|   /_\ |_ _|  \/  |
+   | |/ _ \| ' <| _|   / _ \ | || |\/| |
+   |_/_/ \_|_|\_|___| /_/ \_|___|_|  |_|
+''')
+        print("~~BATTLEFIELD~~")
+        self.cpu_grid.display_game_board()
+
+        pos = self.get_position_input('Enter position to fire : ')
+        row = pos[0]
+        column = pos[1]
+        if self.cpu_grid.query_position(row, column) in ['H', 'M']:
+            print('Already fired at this position. Try again!')
+        
+        else:
+            result = self.cpu_grid.query_position(row, column)
+            if result == 'S':
+                os.system('clear')
+                
+                print('''
+   __ ______________
+  / // /  _/_  __/ /
+ / _  // /  / / /_/ 
+/_//_/___/ /_/ (_)
+''')
+                self.cpu_grid.change_grid(row, column, '💥')
+            else:
+                os.system('clear')
+            
+                print('''
+   __  _________________
+  /  |/  /  _/ __/ __/ /
+ / /|_/ // /_\ \_\ \/_/ 
+/_/  /_/___/___/___(_) 
+                      ''')
+                self.cpu_grid.change_grid(row, column, '💦')
+
+    def take_cpu_shot(self):
+            os.system('clear')
+            print('''
+  _________    __ __ ______   __________ _    ____________ 
+ /_  __/   |  / //_// ____/  / ____/ __ | |  / / ____/ __ |
+  / / / /| | / ,<  / __/    / /   / / / | | / / __/ / /_/ /
+ / / / ___ |/ /| |/ /___   / /___/ /_/ /| |/ / /___/ _, _/ 
+/_/ /_/  |_/_/ |_/_____/   \____/\____/ |___/_____/_/ |_| 
+                   ''')
+            sleep(1)
+            
+
+            """CPU shot - random position"""
+            while True:
+                row = random.choice(self.player_grid.row_labels)
+                column = random.choice(self.player_grid.column_labels)
+                if self.player_grid.query_position(row, column) in ['H', 'M']:
+                    print("CPU already fired at this position. Trying again...")
+                    continue
+                else:
+                    break
+            
+            result = self.player_grid.query_position(row, column)
+            if result == 'S':
+                
+                print('''
+   __ ______________
+  / // /  _/_  __/ /
+ / _  // /  / / /_/ 
+/_//_/___/ /_/ (_)  
+                      ''')
+                self.player_grid.change_grid(row, column, '💥')
+            else:
+                
+                print('''
+   _______   __________
+  / __/ _ | / __/ __/ /
+ _\ \/ __ |/ _// _//_/ 
+/___/_/ |_/_/ /___(_)
+                      ''')
+                self.player_grid.change_grid(row, column, '💦')
+                            
+    
+    def battle_on(self, grid):
+    #  """Check for ships on grid. If no ships on either grid, battle over"""
+        for row in grid.state:
+            if 'S' in row:
+                return True
+        return False
+
