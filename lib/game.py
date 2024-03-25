@@ -4,6 +4,7 @@ from window import Window
 import random
 from time import sleep
 import curses
+from assets import *
 
 class Game:
     """Class to represent the current game"""
@@ -27,17 +28,7 @@ class Game:
             '''for right now I have the while loop on the whole play() but I think we should figure out a more efficient way
             Enables the "P to play again" at the end of a game'''
 
-            self.header.update(''' 
-                (          (       ) (   (    (     
-            (  )\ )  *   ))\ ) ( /( )\ ))\ ) )\ )  
-            ( )\(()/(` )  /(()/( )\()|()/(()/((()/(  
-            )((_)/(_))( )(_))(_)|(_)\ /(_))(_))/(_)) 
-            ((_)_(_)) (_(_()|_))  _((_|_))(_)) (_))   
-            | _ )_ _||_   _/ __|| || |_ _| _ \/ __|  
-            | _ \| |   | | \__ \| __ || ||  _/\__ \  
-            |___/___|  |_| |___/|_||_|___|_|  |___/
-            _________________________________________
-            ''')
+            self.header.update(logo_a())
         
             self.player_win.add("~~HARBOR~~\n")
             self.player_win.update(self.player_grid.display_game_board())
@@ -135,12 +126,7 @@ class Game:
         curses.curs_set(0) #hide cursor while drawing headers
         self.player_win.add("~~HARBOR~~\n")
         self.player_win.update(self.player_grid.display_game_board())
-        self.header.update('''
-  _____ _   _  _____     _   ___ __  __ 
- |_   _/_\ | |/ | __|   /_\ |_ _|  \/  |
-   | |/ _ \| ' <| _|   / _ \ | || |\/| |
-   |_/_/ \_|_|\_|___| /_/ \_|___|_|  |_|
-''')
+        self.header.update(take_aim_a())
         self.cpu_win.add("~~BATTLEFIELD~~\n")
         self.cpu_win.update(self.cpu_grid.display_game_board())
         curses.curs_set(1)
@@ -157,33 +143,19 @@ class Game:
                 self.cpu_grid.change_grid(row, column, '💥')
                 self.cpu_win.add("~~BATTLEFIELD~~\n")
                 self.cpu_win.update(self.cpu_grid.display_game_board())
-                self.header.update('''
-   __ ______________
-  / // /  _/_  __/ /
- / _  // /  / / /_/ 
-/_//_/___/ /_/ (_)
-''')
+                self.header.update(hit_a())
             else:
                 self.cpu_grid.change_grid(row, column, '💦')
                 self.cpu_win.add("~~BATTLEFIELD~~\n")
                 self.cpu_win.update(self.cpu_grid.display_game_board())
-                self.header.update('''
-   __  _________________
-  /  |/  /  _/ __/ __/ /
- / /|_/ // /_\ \_\ \/_/ 
-/_/  /_/___/___/___(_) 
-                      ''')
+                self.header.update(miss_a())
             sleep(1)
 
     def take_cpu_shot(self):
             curses.curs_set(0) #hide cursor while drawing headers
-            self.header.update('''
-  _________    __ __ ______   __________ _    ____________ 
- /_  __/   |  / //_// ____/  / ____/ __ | |  / / ____/ __ |
-  / / / /| | / ,<  / __/    / /   / / / | | / / __/ / /_/ /
- / / / ___ |/ /| |/ /___   / /___/ /_/ /| |/ / /___/ _, _/ 
-/_/ /_/  |_/_/ |_/_____/   \____/\____/ |___/_____/_/ |_| 
-                   ''')
+            self.header.update(under_fire_a())
+            sleep(1)
+            self.header.update(take_cover_a())
             sleep(1)
             
 
@@ -202,22 +174,12 @@ class Game:
                 self.player_grid.change_grid(row, column, '💥')
                 self.player_win.add("~~HARBOR~~\n")
                 self.player_win.update(self.player_grid.display_game_board())
-                self.header.update('''
-   __ ______________
-  / // /  _/_  __/ /
- / _  // /  / / /_/ 
-/_//_/___/ /_/ (_)  
-                      ''')
+                self.header.update(hit_a())
             else:
                 self.player_grid.change_grid(row, column, '💦')
                 self.player_win.add("~~HARBOR~~\n")
                 self.player_win.update(self.player_grid.display_game_board())
-                self.header.update('''
-   _______   __________
-  / __/ _ | / __/ __/ /
- _\ \/ __ |/ _// _//_/ 
-/___/_/ |_/_/ /___(_)
-                      ''')
+                self.header.update(safe_a())
             sleep(1)
     
     def battle_on(self, grid):
