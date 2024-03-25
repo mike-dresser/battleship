@@ -64,9 +64,9 @@ class Game:
             self.cpu_win.addstr(self.cpu_grid.display_game_board())
             self.cpu_win.refresh()
             
-            # '''battle_on() checking for any ship on either grid'''
-            # while self.battle_on(self.player_grid) and self.battle_on(self.cpu_grid):
-            #     self.take_player_shot()
+            '''battle_on() checking for any ship on either grid'''
+            while self.battle_on(self.player_grid) and self.battle_on(self.cpu_grid):
+                self.take_player_shot()
             #     input("Press any key to continue...")
 
             #     if not self.battle_on(self.cpu_grid):
@@ -102,6 +102,7 @@ class Game:
             self.player_grid.place_ship(pos[0], pos[1])
             placed_ships += 1
             self.player_win.clear()
+            self.player_win.addstr("~~HARBOR~~\n")
             self.player_win.addstr(self.player_grid.display_game_board())
             self.player_win.refresh()
         self.ships_placed = True
@@ -151,49 +152,56 @@ class Game:
     ##-Outline for Player Fire
     
     def take_player_shot(self):
-        os.system('clear')
-        print("~~HARBOR~~")
-        self.player_grid.display_game_board()
-        # print("~~BATTLEFIELD~~")
-        # self.cpu_grid.display_game_board()
-        
-        print('''
+        self.player_win.clear()
+        self.player_win.addstr("~~HARBOR~~\n")
+        self.player_win.addstr(self.player_grid.display_game_board())
+        self.player_win.refresh()
+        self.header.clear()
+        self.header.addstr('''
   _____ _   _  _____     _   ___ __  __ 
  |_   _/_\ | |/ | __|   /_\ |_ _|  \/  |
    | |/ _ \| ' <| _|   / _ \ | || |\/| |
    |_/_/ \_|_|\_|___| /_/ \_|___|_|  |_|
 ''')
-        print("~~BATTLEFIELD~~")
-        self.cpu_grid.display_game_board()
-
+        self.header.refresh()
+        self.cpu_win.clear()
+        self.cpu_win.addstr("~~BATTLEFIELD~~\n")
+        self.cpu_grid.cpu_ship_placement()
+        self.cpu_win.addstr(self.cpu_grid.display_game_board())
+        self.cpu_win.refresh()
+        self.user_msg.clear()
         pos = self.get_position_input('Enter position to fire : ')
         row = pos[0]
         column = pos[1]
         if self.cpu_grid.query_position(row, column) in ['H', 'M']:
-            print('Already fired at this position. Try again!')
+            self.user_msg.clear()
+            self.user_msg.addstr('Already fired at this position. Try again!')
+            self.user_msg.refresh()
         
         else:
             result = self.cpu_grid.query_position(row, column)
-            if result == 'S':
-                os.system('clear')
-                
-                print('''
+            if result == 'S':    
+                self.header.clear()            
+                self.header.addstr('''
    __ ______________
   / // /  _/_  __/ /
  / _  // /  / / /_/ 
 /_//_/___/ /_/ (_)
 ''')
+                self.header.refresh()
                 self.cpu_grid.change_grid(row, column, '💥')
+                sleep(1)
             else:
-                os.system('clear')
-            
-                print('''
+                self.header.clear()  
+                self.header.addstr('''
    __  _________________
   /  |/  /  _/ __/ __/ /
  / /|_/ // /_\ \_\ \/_/ 
 /_/  /_/___/___/___(_) 
                       ''')
+                self.header.refresh()
                 self.cpu_grid.change_grid(row, column, '💦')
+                sleep(1)
 
     def take_cpu_shot(self):
             os.system('clear')

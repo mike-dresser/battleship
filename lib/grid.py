@@ -52,13 +52,15 @@ class Grid:
         """Render game grid with column and row labels as a text block"""     
         output = '   '
         for label in self.column_labels:
-            output += label + '|'
+            output += label + ' |'
         output += '\n'
         row_counter = 0
         for row in self.state:
             output += f'{self.row_labels[row_counter]}  '
             for grid_square in row:
                 output += f'{grid_square} '
+                if grid_square != '🌊': #emoji is 2 rows wide, add padding
+                    output += ' '
             output += '\n' 
             row_counter += 1
         return output
