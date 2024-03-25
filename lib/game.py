@@ -1,5 +1,5 @@
 from grid import Grid
-import os
+from window import Window
 import random
 from time import sleep
 import curses
@@ -14,22 +14,21 @@ class Game:
             stdscr (obj): the curses object representing the screen"""
         self.player_grid = Grid(stdscr) 
         self.cpu_grid = Grid(stdscr) 
-        self.s = stdscr
-        self.header = self.new_window(12, 60, 0, 0) 
-        self.user_msg = self.new_window(5, 80, curses.LINES - 5, 1)
-        self.player_win = self.new_window(15, 20, 11, 3)
-        self.cpu_win = self.new_window(15, 20, 11, 35)
+        self.header = Window(12, 60, 0, 0) 
+        self.user_msg = Window(5, 80, curses.LINES - 5, 1)
+        self.player_win = Window(15, 20, 11, 3)
+        self.cpu_win = Window(15, 20, 11, 35)
             
-    def new_window(self, height, width, begin_y, begin_x):
-        """Return new curses window
+    # def new_window(self, height, width, begin_y, begin_x):
+    #     """Return new curses window
         
-        Parameters:
-            height (int): window height in text lines
-            width (int):  window width in columns
-            begin_y (int): y coordinate for top left corner
-            begin_x (int): x coordingate for top left corner"""
+    #     Parameters:
+    #         height (int): window height in text lines
+    #         width (int):  window width in columns
+    #         begin_y (int): y coordinate for top left corner
+    #         begin_x (int): x coordingate for top left corner"""
 
-        return curses.newwin(height, width, begin_y, begin_x)
+        # return curses.newwin(height, width, begin_y, begin_x)
           
     def play(self):
         """Begin new game"""
@@ -38,9 +37,7 @@ class Game:
             '''for right now I have the while loop on the whole play() but I think we should figure out a more efficient way
             Enables the "P to play again" at the end of a game'''
 
-            self.s.clear()
-            self.header.clear()
-            self.header.addstr(''' 
+            self.header.update(''' 
                 (          (       ) (   (    (     
             (  )\ )  *   ))\ ) ( /( )\ ))\ ) )\ )  
             ( )\(()/(` )  /(()/( )\()|()/(()/((()/(  
@@ -51,42 +48,32 @@ class Game:
             |___/___|  |_| |___/|_||_|___|_|  |___/
             _________________________________________
             ''')
-            self.header.refresh()
         
-            self.player_win.clear()
-            self.player_win.addstr("~~HARBOR~~\n")
-            self.player_win.addstr(self.player_grid.display_game_board())
-            self.player_win.refresh()
+            self.player_win.add("~~HARBOR~~\n")
+            self.player_win.update(self.player_grid.display_game_board())
 
             self.place_ships()
-            self.cpu_win.clear()
-            self.cpu_win.addstr("~~BATTLEFIELD~~\n")
+            self.cpu_win.add("~~BATTLEFIELD~~\n")
             self.cpu_grid.cpu_ship_placement()
-            self.cpu_win.addstr(self.cpu_grid.display_game_board())
-            self.cpu_win.refresh()
+            self.cpu_win.update(self.cpu_grid.display_game_board())
             
             '''battle_on() checking for any ship on either grid'''
             while self.battle_on(self.player_grid) and self.battle_on(self.cpu_grid):
                 self.take_player_shot()
 
                 if not self.battle_on(self.cpu_grid):
-                    self.user_msg.clear()
-                    self.user_msg.addstr("Congratulations! You win!\n\n")
-                    self.user_msg.refresh()
+                    self.user_msg.update("Congratulations! You win!\n\n")
 
                     break
 
                 self.take_cpu_shot()
                 if not self.battle_on(self.player_grid):
-                    self.user_msg.clear()
-                    self.user_msg.addstr("Sorry, you lose!")
-                    self.user_msg.refresh()
+                    self.user_msg.update("Sorry, you lose!")
                     break
             
         
-            self.user_msg.addstr("Press 'P' to play again, or any other key to exit: ")
-            self.user_msg.refresh()
-            play_again_input = self.user_msg.getkey()
+            self.user_msg.update("Press 'P' to play again, or any other key to exit: ")
+            play_again_input = self.user_msg.get_input()
             if play_again_input.lower() != 'p':
                 play_again = False
 
@@ -95,21 +82,16 @@ class Game:
         """Place player ships"""
         placed_ships = 0
         while placed_ships < 3:
-            self.user_msg.clear()
-            self.user_msg.addstr('Begin by placing your 1x1 ships on the game board.\n')
-            self.user_msg.addstr(f'*** {3 - placed_ships} ships remaining ***\n')
+            self.user_msg.add('Begin by placing your 1x1 ships on the game board.\n')
+            self.user_msg.update(f'*** {3 - placed_ships} ships remaining ***\n')
             pos = self.get_position_input('Position for your ship (i.e. "B2") ')
-            self.user_msg.refresh()
             if self.player_grid.query_position(pos[0], pos[1]) == 'S':
-                self.user_msg.addstr('Cannot place a ship on top of another!\n')
-                self.user_msg.refresh()
+                self.user_msg.update('Cannot place a ship on top of another!\n')
                 continue
             self.player_grid.place_ship(pos[0], pos[1])
             placed_ships += 1
-            self.player_win.clear()
-            self.player_win.addstr("~~HARBOR~~\n")
-            self.player_win.addstr(self.player_grid.display_game_board())
-            self.player_win.refresh()
+            self.player_win.add("~~HARBOR~~\n")
+            self.player_win.update(self.player_grid.display_game_board())
         self.ships_placed = True
 
     def get_position_input(self, message):
@@ -123,31 +105,26 @@ class Game:
         """
         accepted = False
         while not accepted:
-            self.user_msg.addstr(message)
-            self.user_msg.refresh()
+            self.user_msg.update(message)
             curses.echo()
-            value = self.user_msg.getstr()
+            value = self.user_msg.get_input()
             return_char = ''
             for num in value:
                 return_char += chr(num)
             value = return_char
             result = ''
             if not len(value) == 2:
-                self.user_msg.addstr('Position must be two characters!')
-                self.user_msg.refresh()
+                self.user_msg.update('Position must be two characters!')
                 continue
             if value[0].upper() in 'ABCDE':
                 result += value[0].upper()
             else:
-                self.user_msg.addstr('First value must be valid letter!\n')
-                self.user_msg.refresh()
-                                     
+                self.user_msg.update('First value must be valid letter!\n')
                 continue
             if value[1].isnumeric() and int(value[1]) <= 5:
                 result += value[1]
             else:
-                self.user_msg.addstr('Second value must be a valid number!\n')
-                self.user_msg.refresh()
+                self.user_msg.update('Second value must be a valid number!\n')
                                      
                 continue
             accepted = True
@@ -158,78 +135,57 @@ class Game:
     
     def take_player_shot(self):
         curses.curs_set(0) #hide cursor while drawing headers
-        self.player_win.clear()
-        self.player_win.addstr("~~HARBOR~~\n")
-        self.player_win.addstr(self.player_grid.display_game_board())
-        self.player_win.refresh()
-        self.header.clear()
-        self.header.addstr('''
+        self.player_win.add("~~HARBOR~~\n")
+        self.player_win.update(self.player_grid.display_game_board())
+        self.header.update('''
   _____ _   _  _____     _   ___ __  __ 
  |_   _/_\ | |/ | __|   /_\ |_ _|  \/  |
    | |/ _ \| ' <| _|   / _ \ | || |\/| |
    |_/_/ \_|_|\_|___| /_/ \_|___|_|  |_|
 ''')
-        self.header.refresh()
-        self.cpu_win.clear()
-        self.cpu_win.addstr("~~BATTLEFIELD~~\n")
-        self.cpu_win.addstr(self.cpu_grid.display_game_board())
-        self.cpu_win.refresh()
-        self.user_msg.clear()
+        self.cpu_win.add("~~BATTLEFIELD~~\n")
+        self.cpu_win.update(self.cpu_grid.display_game_board())
         curses.curs_set(1)
         pos = self.get_position_input('Enter position to fire : ')
         row = pos[0]
         column = pos[1]
         curses.curs_set(0) #hide cursor while drawing headers
-        self.user_msg.clear()
-        self.user_msg.refresh()
         if self.cpu_grid.query_position(row, column) in ['H', 'M']:
-            self.user_msg.clear()
-            self.user_msg.addstr('Already fired at this position. Try again!')
-            self.user_msg.refresh()
+            self.user_msg.add('Already fired at this position. Try again!')
         
         else:
             result = self.cpu_grid.query_position(row, column)
             if result == 'S':    
                 self.cpu_grid.change_grid(row, column, '💥')
-                self.cpu_win.clear()
-                self.cpu_win.addstr("~~BATTLEFIELD~~\n")
-                self.cpu_win.addstr(self.cpu_grid.display_game_board())
-                self.cpu_win.refresh()
-                self.header.clear()            
-                self.header.addstr('''
+                self.cpu_win.add("~~BATTLEFIELD~~\n")
+                self.cpu_win.update(self.cpu_grid.display_game_board())
+                self.header.update('''
    __ ______________
   / // /  _/_  __/ /
  / _  // /  / / /_/ 
 /_//_/___/ /_/ (_)
 ''')
-                self.header.refresh()
             else:
                 self.cpu_grid.change_grid(row, column, '💦')
-                self.cpu_win.clear()
-                self.cpu_win.addstr("~~BATTLEFIELD~~\n")
-                self.cpu_win.addstr(self.cpu_grid.display_game_board())
-                self.cpu_win.refresh()
-                self.header.clear()  
-                self.header.addstr('''
+                self.cpu_win.add("~~BATTLEFIELD~~\n")
+                self.cpu_win.update(self.cpu_grid.display_game_board())
+                self.header.update('''
    __  _________________
   /  |/  /  _/ __/ __/ /
  / /|_/ // /_\ \_\ \/_/ 
 /_/  /_/___/___/___(_) 
                       ''')
-                self.header.refresh()
             sleep(1)
 
     def take_cpu_shot(self):
             curses.curs_set(0) #hide cursor while drawing headers
-            self.header.clear()            
-            self.header.addstr('''
+            self.header.update('''
   _________    __ __ ______   __________ _    ____________ 
  /_  __/   |  / //_// ____/  / ____/ __ | |  / / ____/ __ |
   / / / /| | / ,<  / __/    / /   / / / | | / / __/ / /_/ /
  / / / ___ |/ /| |/ /___   / /___/ /_/ /| |/ / /___/ _, _/ 
 /_/ /_/  |_/_/ |_/_____/   \____/\____/ |___/_____/_/ |_| 
                    ''')
-            self.header.refresh()
             sleep(1)
             
 
@@ -238,9 +194,7 @@ class Game:
                 row = random.choice(self.player_grid.row_labels)
                 column = random.choice(self.player_grid.column_labels)
                 if self.player_grid.query_position(row, column) in ['H', 'M']:
-                    self.user_msg.clear()
-                    self.user_msg.addstr("CPU already fired at this position. Trying again...")
-                    self.user_msg.refresh()
+                    self.user_msg.update("CPU already fired at this position. Trying again...")
                     continue
                 else:
                     break
@@ -248,31 +202,24 @@ class Game:
             result = self.player_grid.query_position(row, column)
             if result == 'S':
                 self.player_grid.change_grid(row, column, '💥')
-                self.player_win.addstr("~~HARBOR~~\n")
-                self.player_win.addstr(self.player_grid.display_game_board())
-                self.player_win.refresh()
-                self.header.clear()
-                self.header.addstr('''
+                self.player_win.add("~~HARBOR~~\n")
+                self.player_win.update(self.player_grid.display_game_board())
+                self.header.update('''
    __ ______________
   / // /  _/_  __/ /
  / _  // /  / / /_/ 
 /_//_/___/ /_/ (_)  
                       ''')
-                self.header.refresh()
             else:
                 self.player_grid.change_grid(row, column, '💦')
-                self.player_win.clear()
-                self.player_win.addstr("~~HARBOR~~\n")
-                self.player_win.addstr(self.player_grid.display_game_board())
-                self.player_win.refresh()
-                self.header.clear()
-                self.header.addstr('''
+                self.player_win.add("~~HARBOR~~\n")
+                self.player_win.update(self.player_grid.display_game_board())
+                self.header.update('''
    _______   __________
   / __/ _ | / __/ __/ /
  _\ \/ __ |/ _// _//_/ 
 /___/_/ |_/_/ /___(_)
                       ''')
-                self.header.refresh()
             sleep(1)
     
     def battle_on(self, grid):
