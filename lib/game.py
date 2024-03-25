@@ -1,3 +1,4 @@
+import sys
 from grid import Grid
 from window import Window
 import random
@@ -12,24 +13,13 @@ class Game:
         
         Parameter:
             stdscr (obj): the curses object representing the screen"""
-        self.player_grid = Grid(stdscr) 
-        self.cpu_grid = Grid(stdscr) 
-        self.header = Window(12, 60, 0, 0) 
+        self.player_grid = Grid() 
+        self.cpu_grid = Grid() 
+        self.header = Window(11, 60, 0, 0) 
         self.user_msg = Window(5, 80, curses.LINES - 5, 1)
         self.player_win = Window(15, 20, 11, 3)
         self.cpu_win = Window(15, 20, 11, 35)
             
-    # def new_window(self, height, width, begin_y, begin_x):
-    #     """Return new curses window
-        
-    #     Parameters:
-    #         height (int): window height in text lines
-    #         width (int):  window width in columns
-    #         begin_y (int): y coordinate for top left corner
-    #         begin_x (int): x coordingate for top left corner"""
-
-        # return curses.newwin(height, width, begin_y, begin_x)
-          
     def play(self):
         """Begin new game"""
         play_again = True
@@ -54,6 +44,7 @@ class Game:
 
             self.place_ships()
             self.cpu_win.add("~~BATTLEFIELD~~\n")
+            self.cpu_grid.toggle_ship_visibility() # hide CPU ship positions by default
             self.cpu_grid.cpu_ship_placement()
             self.cpu_win.update(self.cpu_grid.display_game_board())
             
@@ -93,7 +84,7 @@ class Game:
             self.player_win.add("~~HARBOR~~\n")
             self.player_win.update(self.player_grid.display_game_board())
         self.ships_placed = True
-
+    
     def get_position_input(self, message):
         """Ensure player input is a valid two-character string like 'A1', case-insensitive.
         
@@ -113,6 +104,13 @@ class Game:
                 return_char += chr(num)
             value = return_char
             result = ''
+            try:
+                if value.upper() == 'XX':
+                    self.cpu_grid.toggle_ship_visibility()
+                    self.cpu_win.add("~~BATTLEFIELD~~\n")
+                    self.cpu_win.update(self.cpu_grid.display_game_board())
+            except:        
+                pass
             if not len(value) == 2:
                 self.user_msg.update('Position must be two characters!')
                 continue
@@ -228,4 +226,3 @@ class Game:
             if 'S' in row:
                 return True
         return False
-

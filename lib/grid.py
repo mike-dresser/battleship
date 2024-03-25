@@ -17,12 +17,12 @@ class Grid:
     with appropriate labels!
     """
 
-    def __init__(self, stdscr) -> None:
+    def __init__(self) -> None:
         self.state = type(self).reset_grid()
         self.column_labels = ['1', '2', '3', '4', '5']
         self.row_labels = ['A', 'B', 'C', 'D', 'E']
         self.row_dict = { 'A': 0,'B': 1,'C': 2,'D': 3,'E': 4} # convert row letters to indexes
-        self.s = stdscr
+        self.x_ray = True #show ship positions
 
     @classmethod
     def reset_grid(cls):
@@ -58,13 +58,22 @@ class Grid:
         for row in self.state:
             output += f'{self.row_labels[row_counter]}  '
             for grid_square in row:
-                output += f'{grid_square} '
-                if grid_square == 'S': #emoji is 2 rows wide, add padding
-                    output += ' '
+                if self.x_ray:
+                    output += f'{grid_square} '
+                    if grid_square == 'S': #emoji is 2 rows wide, add padding
+                        output += ' '
+                else:
+                    if grid_square == 'S':
+                        output += '🌊 '
+                    else:    
+                        output += f'{grid_square} '
             output += '\n' 
             row_counter += 1
         return output
-        
+    
+    def toggle_ship_visibility(self):
+        self.x_ray = not self.x_ray
+            
     def change_grid(self, row, column, symbol):
         """Change a grid square to a different symbol
         
