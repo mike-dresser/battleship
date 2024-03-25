@@ -59,7 +59,7 @@ class Grid:
             output += f'{self.row_labels[row_counter]}  '
             for grid_square in row:
                 output += f'{grid_square} '
-                if grid_square != '🌊': #emoji is 2 rows wide, add padding
+                if grid_square == 'S': #emoji is 2 rows wide, add padding
                     output += ' '
             output += '\n' 
             row_counter += 1
@@ -78,8 +78,6 @@ class Grid:
         """
         
         self.state[self.row_dict[row]][int(column) - 1] = symbol
-        self.display_game_board()
-
 
     def cpu_ship_placement(self):
         """Randomly place ships on the game grid
