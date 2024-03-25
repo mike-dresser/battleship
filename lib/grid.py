@@ -17,11 +17,12 @@ class Grid:
     with appropriate labels!
     """
 
-    def __init__(self) -> None:
+    def __init__(self, stdscr) -> None:
         self.state = type(self).reset_grid()
         self.column_labels = ['1', '2', '3', '4', '5']
         self.row_labels = ['A', 'B', 'C', 'D', 'E']
         self.row_dict = { 'A': 0,'B': 1,'C': 2,'D': 3,'E': 4} # convert row letters to indexes
+        self.s = stdscr
 
     @classmethod
     def reset_grid(cls):
@@ -51,17 +52,19 @@ class Grid:
         """Render game grid with column and row labels as a text block"""     
         output = '   '
         for label in self.column_labels:
-            output += label + '|'
+            output += label + ' |'
         output += '\n'
         row_counter = 0
         for row in self.state:
             output += f'{self.row_labels[row_counter]}  '
             for grid_square in row:
                 output += f'{grid_square} '
+                if grid_square == 'S': #emoji is 2 rows wide, add padding
+                    output += ' '
             output += '\n' 
             row_counter += 1
-        print(output)
-
+        return output
+        
     def change_grid(self, row, column, symbol):
         """Change a grid square to a different symbol
         
@@ -75,8 +78,6 @@ class Grid:
         """
         
         self.state[self.row_dict[row]][int(column) - 1] = symbol
-        self.display_game_board()
-
 
     def cpu_ship_placement(self):
         """Randomly place ships on the game grid
@@ -104,18 +105,18 @@ class Grid:
 
 
 
-player_grid = Grid()
-cpu_grid = Grid()
+# player_grid = Grid()
+# cpu_grid = Grid()
 
-# Place ships for the CPU
-cpu_grid.cpu_ship_placement()
+# # Place ships for the CPU
+# cpu_grid.cpu_ship_placement()
 
-# Display player's grid
-print("Player's Grid:")
-player_grid.display_game_board()
+# # Display player's grid
+# print("Player's Grid:")
+# player_grid.display_game_board()
 
-# Display CPU's grid
-print("\nCPU's Grid:")
-cpu_grid.display_game_board()
+# # Display CPU's grid
+# print("\nCPU's Grid:")
+# cpu_grid.display_game_board()
 
-# print(cpu_grid)
+# # print(cpu_grid)
