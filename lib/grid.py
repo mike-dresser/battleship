@@ -139,9 +139,24 @@ class Grid:
             return self.state[self.row_dict[row]][int(column) - 1]
     
     def fire_on(self, row, column):
+        """Recieve fire, update grid
+        
+        Return:
+            str: 'S' | '🌊'
+            """
         result = self.query_position(row, column)
         if result == 'S':    
             self.change_grid(row, column, '💥')
+            self.assign_damage(row, column)
         else:
             self.change_grid(row, column, '💦')
         return result
+
+    def assign_damage(self, row, column):
+        coord = row + column
+        for ship in self.ships:
+            if ship.coords.get(coord):
+                if ship.survive_hit(coord):
+                    return
+                else:
+                    self.ships.remove(ship)
