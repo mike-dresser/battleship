@@ -17,8 +17,8 @@ class Game:
         self.cpu_grid = Grid() 
         self.header = Window(11, 60, 0, 0) 
         self.user_msg = Window(5, 80, curses.LINES - 5, 1)
-        self.player_win = Window(15, 20, 11, 3, "~~HARBOR~~\n")
-        self.cpu_win = Window(15, 20, 11, 35, "~~BATTLEFIELD~~\n")
+        self.player_win = Window(15, 20, 11, 3, "    ~~HARBOR~~\n")
+        self.cpu_win = Window(15, 20, 11, 35, "  ~~BATTLEFIELD~~\n")
         self.ship_length = 2
             
     def play(self):
@@ -26,8 +26,8 @@ class Game:
         
         Return True to play again, False to exit."""
         self.header.update(logo_a())
-    
         self.player_win.update(self.player_grid.display_game_board())
+        self.cpu_win.update(self.cpu_grid.display_game_board())
 
         self.place_ships()
         self.cpu_grid.toggle_ship_visibility() # hide CPU ship positions by default
@@ -59,7 +59,7 @@ class Game:
         """Place player ships"""
         placed_ships = 0
         while placed_ships < 3:
-            self.user_msg.add('Begin by placing your 1x2 ships on the game board.\n')
+            self.user_msg.add('Begin by placing your 1x2 ships in the harbor.\n')
             self.user_msg.add(f'*** {3 - placed_ships} ships remaining ***\n')
             pos = self.get_position_input('Position for your ship (i.e. "B2") ')
             if not self.player_grid.valid_ship_placement(pos, self.ship_length):
