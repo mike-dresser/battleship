@@ -9,10 +9,10 @@ class Game:
     """Class to represent the current game"""
 
     def __init__(self, stdscr):
-        """Main class to control gameplay
+        """Main class controlling gameplay
         
         Parameter:
-            stdscr (obj): the curses object representing the screen"""
+            stdscr (obj): the curses object representing the screen; curses wrapper() passes this object, but I have not used it yet; the curses window objects handle all screen updates"""
         self.player_grid = Grid() 
         self.cpu_grid = Grid() 
         self.header = Window(11, 60, 0, 0) 
@@ -79,10 +79,10 @@ class Game:
         """Ensure player input is a valid two-character string like 'A1', case-insensitive.
         
         Parameters:
-            message (str): display message for input field
+            message (str): display message for input field, a la python input()
 
         Return:
-            str (length 2)
+            str (length == 2)
         """
         accepted = False
         while not accepted:
@@ -131,6 +131,7 @@ class Game:
         if self.cpu_grid.query_position(row, column) in ['H', 'M']:
             self.user_msg.add('Already fired at this position. Try again!')
         
+        ### the following code is repeteded in take_cpu_shot, we can probably refactor this ###
         else:
             result = self.cpu_grid.query_position(row, column)
             if result == 'S':    
@@ -150,13 +151,12 @@ class Game:
             self.header.update(take_cover_a())
             sleep(1)
             
-
             """CPU shot - random position"""
             while True:
                 row = random.choice(self.player_grid.row_labels)
                 column = random.choice(self.player_grid.column_labels)
                 if self.player_grid.query_position(row, column) in ['H', 'M']:
-                    self.user_msg.update("CPU already fired at this position. Trying again...")
+                    self.user_msg.update("CPU already fired at this position. Trying again...") # this message never shows, or only briefly. Add delay, or remove?
                     continue
                 else:
                     break

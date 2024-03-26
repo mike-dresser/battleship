@@ -23,7 +23,7 @@ class Grid:
         self.column_labels = ['1', '2', '3', '4', '5'] # subtracting 1 gets the sub-list index
         self.row_labels = ['A', 'B', 'C', 'D', 'E']
         self.row_dict = { 'A': 0,'B': 1,'C': 2,'D': 3,'E': 4} # convert row letters to indexes
-        self.x_ray = True #show ship positions
+        self.x_ray = True #show ship positions as 'S'
         self.ships = []
 
     @classmethod
@@ -43,9 +43,9 @@ class Grid:
          
         Parameters:
             coord (str): point marking the prow of the ship ("A1")
-            length (int): global ship length defined in Game
+            length (int): ship length defined in Game
         Return:
-            Boolean (True == valid)
+            Boolean (True == valid position)
             """
         row, column = coord[0], coord[1]
         for i in range(length):
@@ -75,7 +75,7 @@ class Grid:
         self.ships.append(new)
 
     def display_game_board(self):
-        """Render game grid with column and row labels as a text block"""     
+        """Render game grid with column and row labels into a text block"""     
         output = '   '
         for label in self.column_labels:
             output += label + ' |'
@@ -98,6 +98,9 @@ class Grid:
         return output
     
     def toggle_ship_visibility(self):
+        """Make ship positions visible with 'S'
+        
+        This is always ON for the user, and begins OFF for CPU"""
         self.x_ray = not self.x_ray
             
     def change_grid(self, row, column, symbol):
@@ -115,12 +118,7 @@ class Grid:
         self.state[self.row_dict[row]][int(column) - 1] = symbol
 
     def cpu_ship_placement(self):
-        """Randomly place ships on the game grid
-        
-        NEXT GOAL WOULD BE TO HIDE THE SHIPS OR UNLESS HIT
-        
-        """
-
+        """Randomly place ships on the game grid"""
         # ship_sizes = [2, 3, 1] 
         # total_ships = sum(ship_sizes)
         total_ships = 3
