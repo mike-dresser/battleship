@@ -138,21 +138,29 @@ class Grid:
             """Return the current value for a grid position"""
             return self.state[self.row_dict[row]][int(column) - 1]
     
+    def fire_on(self, row, column):
+        """Recieve fire, update grid
+        
+        Return:
+            str: 'S' | '🌊'
+            """
+        result = self.query_position(row, column)
+        if result == 'S':    
+            self.change_grid(row, column, '💥')
+            self.assign_damage(row, column)
+        else:
+            self.change_grid(row, column, '💦')
+        return result
 
-
-
-# player_grid = Grid()
-# cpu_grid = Grid()
-
-# # Place ships for the CPU
-# cpu_grid.cpu_ship_placement()
-
-# # Display player's grid
-# print("Player's Grid:")
-# player_grid.display_game_board()
-
-# # Display CPU's grid
-# print("\nCPU's Grid:")
-# cpu_grid.display_game_board()
-
-# # print(cpu_grid)
+    def assign_damage(self, row, column):
+        """Assign damage to ships, remove from list if sunk
+        
+        Return:
+            None"""
+        coord = row + column
+        for ship in self.ships:
+            if ship.coords.get(coord):
+                if ship.survive_hit(coord):
+                    return
+                else:
+                    self.ships.remove(ship)
