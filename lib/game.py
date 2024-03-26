@@ -27,41 +27,38 @@ class Game:
         self.stdscr.addstr(curses.LINES - 3, 0, "Press 'Q' to quit")
 
     def play(self):
-        """Begin new game"""
-        play_again = True
-        while play_again:
-            '''for right now I have the while loop on the whole play() but I think we should figure out a more efficient way
-            Enables the "P to play again" at the end of a game'''
-
-            self.header.update(logo_a())
+        """Begin new game
         
-            self.player_win.update(self.player_grid.display_game_board())
+        Return True to play again, False to exit."""
+        self.header.update(logo_a())
+    
+        self.player_win.update(self.player_grid.display_game_board())
 
-            self.place_ships()
-            self.cpu_grid.toggle_ship_visibility() # hide CPU ship positions by default
-            self.cpu_grid.cpu_ship_placement()
-            self.cpu_win.update(self.cpu_grid.display_game_board())
-            
-            '''battle_on() checking for any ship on either grid'''
-            while self.battle_on(self.player_grid) and self.battle_on(self.cpu_grid):
-                self.take_player_shot()
-
-                if not self.battle_on(self.cpu_grid):
-                    self.user_msg.update("Congratulations! You win!\n\n")
-
-                    break
-
-                self.take_cpu_shot()
-                if not self.battle_on(self.player_grid):
-                    self.user_msg.update("Sorry, you lose!")
-                    break
-            
+        self.place_ships()
+        self.cpu_grid.toggle_ship_visibility() # hide CPU ship positions by default
+        self.cpu_grid.cpu_ship_placement()
+        self.cpu_win.update(self.cpu_grid.display_game_board())
         
-            self.user_msg.update("Press 'P' to play again, or any other key to exit: ")
-            play_again_input = self.user_msg.get_input()
-            if play_again_input.lower() != 'p':
-                play_again = False
+        '''battle_on() checking for any ship on either grid'''
+        while self.battle_on(self.player_grid) and self.battle_on(self.cpu_grid):
+            self.take_player_shot()
 
+            if not self.battle_on(self.cpu_grid):
+                self.user_msg.add("Congratulations! You win!\n\n")
+
+                break
+
+            self.take_cpu_shot()
+            if not self.battle_on(self.player_grid):
+                self.user_msg.add("Sorry, you lose!")
+                break
+        
+    
+        self.user_msg.update("Press 'P' to play again, or any other key to exit: ")
+        play_again_input = self.user_msg.get_input()
+        if play_again_input.lower() != 'p':
+           return False 
+        return True
 
     def place_ships(self):
         """Place player ships"""
