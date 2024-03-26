@@ -51,8 +51,6 @@ def main(stdscr):
     stdscr.addstr(0, 0, bombs_away_a() )
     stdscr.refresh()
 
-
-
     progress = 0.0
     while progress <= 1.0:
         incoming(stdscr, progress)
@@ -64,30 +62,6 @@ def main(stdscr):
         outgoing(stdscr, progress)
         time.sleep(0.5)
         progress -= 0.1
-
-# def under_fire_a():
-#     return '''
-#                 _  _ _  _ ___  ____ ____        
-#                 |  | |\ | |  \ |___ |__/        
-#                 |__| | \| |__/ |___ |  \                        
-#                     ____  _ ____ ____      
-#                     |___  | |__/ |___      
-#                     |     | |  \ |___     
-#         ________________________________________
-                            
-# '''
-
-# def bombs_away_a():
-#         return '''
-#                         ___  ____  __  ______  ____
-#                        / _ )/ __ \/  |/  / _ )/ __/
-#                       / _  / /_/ / /|_/ / _  |\ \  
-#                      /____/\____/_/__/_/____/___/__
-#                         / _ | | /| / / _ \ \/ /  / /
-#                        / __ | |/ |/ / __ |\  /  /_/ 
-#                       /_/ |_|__/|__/_/ |_|/_/  (_)  
-#                 ________________________________________
-#                              '''
 
 
 curses.wrapper(main)
