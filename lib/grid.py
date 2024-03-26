@@ -153,6 +153,7 @@ class Grid:
         return result
 
     def assign_damage(self, row, column):
+        """Assign damage to ships, remove from list if sunk"""
         coord = row + column
         for ship in self.ships:
             if ship.coords.get(coord):
