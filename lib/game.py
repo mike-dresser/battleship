@@ -65,10 +65,11 @@ class Game:
         """Place player ships"""
         placed_ships = 0
         while placed_ships < 3:
-            self.user_msg.add('Begin by placing your 1x2 ships in the harbor.\n')
+            self.user_msg.add('Begin by placing your ships in the harbor.\n')
             self.user_msg.add(f'*** {3 - placed_ships} ships remaining ***\n')
             pos = self.get_position_input('Position for your ship (i.e. "B2") ')
-            if not self.player_grid.valid_ship_placement(pos, Grid.SHIP_SIZE):
+            horizontal = self.get_orientation(f'Position: {pos}\nOrientation: [H]orizontal or [V]ertical? ')
+            if not self.player_grid.valid_ship_placement(pos, horizontal, Grid.SHIP_SIZE):
                 curses.curs_set(0) #hide cursor while drawing headers
                 self.user_msg.update('The ship cannot fit here!\nPress any key to try again...')
                 self.player_win.get_input()
@@ -78,6 +79,28 @@ class Game:
             self.player_win.update(self.player_grid.display_game_board())
         self.ships_placed = True
     
+    def get_orientation(self, message):
+        """Get ship orientation (horizontal or vertical)
+        
+        Return:
+            boolean: True == horizontal"""
+        accepted = False
+        while not accepted:
+            self.user_msg.update(message)
+            curses.echo()
+            value = self.user_msg.get_input()
+            try:
+                if not value[0].lower() in ['v', 'h']:
+                    self.user_msg.add('Please choose V or H!\n')
+                    continue
+            except:
+                self.user_msg.add('Please enter V or H...\n')
+                continue
+            if value[0].lower() == 'v':
+                return False
+            if value[0].lower() == 'h':
+                return True
+                
     def get_position_input(self, message):
         """Ensure player input is a valid two-character string like 'A1', case-insensitive.
         

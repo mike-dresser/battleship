@@ -3,7 +3,7 @@ from ship import Ship
 
 class Grid:
 
-    SHIP_SIZE = 4
+    SHIP_SIZE = 3
     """
     The game grid is represented as a list of lists,
     with each sub-list as a row. An individual cell
@@ -40,22 +40,24 @@ class Grid:
                 ]
         return grid
     
-    def valid_ship_placement(self, coord, length):
+    def valid_ship_placement(self, coord, horizontal, length):
         """Return whether the ship can be placed without overlapping another or leaving the board.
          
         Parameters:
-            coord (str): point marking the prow of the ship ("A1")
-            length (int): ship length defined in Game
+            coord       (str): point marking the prow of the ship ("A1")
+            horizontal (bool): orientation; True == horizontal
+            length      (int): ship length defined in Game
         Return:
             Boolean (True == valid position)
             """
         row, column = coord[0], coord[1]
-        for i in range(length):
-            if self.row_dict[row] + i > 4:
-                return False
-            if self.state[self.row_dict[row] + i][int(column) - 1] == 'S':
-                return False
-        return True        
+        if not horizontal:
+            for i in range(length):
+                if self.row_dict[row] + i > 4:
+                    return False
+                if self.state[self.row_dict[row] + i][int(column) - 1] == 'S':
+                    return False
+            return True        
 
     
     def place_ship(self, start_coords):
@@ -137,8 +139,9 @@ class Grid:
         while placed_ships < total_ships:
             row = random.choice(self.row_labels)
             column = random.choice(self.column_labels)
+            horizontal = random.choice([True, False])
             # hard-coding ship length below for now, user ship placement is called from Game where length is store, but CPU placement is here
-            if self.valid_ship_placement(row + column, Grid.SHIP_SIZE):
+            if self.valid_ship_placement(row + column, horizontal, Grid.SHIP_SIZE):
                 self.place_ship(row + column)
                 placed_ships += 1
 
