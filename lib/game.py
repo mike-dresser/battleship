@@ -20,7 +20,7 @@ class Game:
         self.user_msg = Window(4, 80, curses.LINES - 4, 1)
         self.player_win = Window(15, 20, 11, 3, "    ~~HARBOR~~\n")
         self.cpu_win = Window(15, 20, 11, 35, "  ~~BATTLEFIELD~~\n")
-        self.ship_length = 1
+        # self.ship_length = 1
     
     def draw_quit_message(self):
         """Draws the quit message on the screen"""
@@ -68,7 +68,7 @@ class Game:
             self.user_msg.add('Begin by placing your 1x2 ships in the harbor.\n')
             self.user_msg.add(f'*** {3 - placed_ships} ships remaining ***\n')
             pos = self.get_position_input('Position for your ship (i.e. "B2") ')
-            if not self.player_grid.valid_ship_placement(pos, self.ship_length):
+            if not self.player_grid.valid_ship_placement(pos, Grid.SHIP_SIZE):
                 curses.curs_set(0) #hide cursor while drawing headers
                 self.user_msg.update('The ship cannot fit here!\nPress any key to try again...')
                 self.player_win.get_input()

@@ -2,6 +2,8 @@ import random
 from ship import Ship
 
 class Grid:
+
+    SHIP_SIZE = 4
     """
     The game grid is represented as a list of lists,
     with each sub-list as a row. An individual cell
@@ -66,11 +68,17 @@ class Grid:
             None
         """
         # Calculate all coordinates occupied by ship
-        coords =[start_coords,
-                self.row_labels[self.row_dict[start_coords[0]] + 1 ] + start_coords[1]
-        ]
+        coords =[start_coords]
+        count = 1
+        while count < Grid.SHIP_SIZE:
+            coords.append(self.row_labels[self.row_dict[start_coords[0]] + count ] + start_coords[1])
+            count += 1
+    
         # Update grid state
-        for [row, column] in coords:
+        for coord in coords:
+            row = coord[0]
+            column = coord[1]
+
             self.state[self.row_dict[row]][int(column) - 1] = 'S'
         # Build new ship object
         new = Ship(coords) 
@@ -130,7 +138,7 @@ class Grid:
             row = random.choice(self.row_labels)
             column = random.choice(self.column_labels)
             # hard-coding ship length below for now, user ship placement is called from Game where length is store, but CPU placement is here
-            if self.valid_ship_placement(row + column, 2):
+            if self.valid_ship_placement(row + column, Grid.SHIP_SIZE):
                 self.place_ship(row + column)
                 placed_ships += 1
 
