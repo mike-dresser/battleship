@@ -17,8 +17,8 @@ class Game:
         self.cpu_grid = Grid() 
         self.header = Window(11, 60, 0, 0) 
         self.user_msg = Window(5, 80, curses.LINES - 5, 1)
-        self.player_win = Window(15, 20, 11, 3)
-        self.cpu_win = Window(15, 20, 11, 35)
+        self.player_win = Window(15, 20, 11, 3, "~~HARBOR~~\n")
+        self.cpu_win = Window(15, 20, 11, 35, "~~BATTLEFIELD~~\n")
         self.ship_length = 2
             
     def play(self):
@@ -30,11 +30,9 @@ class Game:
 
             self.header.update(logo_a())
         
-            self.player_win.add("~~HARBOR~~\n")
             self.player_win.update(self.player_grid.display_game_board())
 
             self.place_ships()
-            self.cpu_win.add("~~BATTLEFIELD~~\n")
             self.cpu_grid.toggle_ship_visibility() # hide CPU ship positions by default
             self.cpu_grid.cpu_ship_placement()
             self.cpu_win.update(self.cpu_grid.display_game_board())
@@ -74,7 +72,6 @@ class Game:
                 continue
             self.player_grid.place_ship(pos)
             placed_ships += 1
-            self.player_win.add("~~HARBOR~~\n")
             self.player_win.update(self.player_grid.display_game_board())
         self.ships_placed = True
     
@@ -96,7 +93,6 @@ class Game:
             try:
                 if value.upper() == 'XX':
                     self.cpu_grid.toggle_ship_visibility()
-                    self.cpu_win.add("~~BATTLEFIELD~~\n")
                     self.cpu_win.update(self.cpu_grid.display_game_board())
             except:        
                 pass
@@ -122,13 +118,11 @@ class Game:
     
     def take_player_shot(self):
         curses.curs_set(0) #hide cursor while drawing headers
-        self.player_win.add("~~HARBOR~~\n")
-        self.player_win.add(f'{len(self.player_grid.ships)} ships afloat\n')
         self.player_win.update(self.player_grid.display_game_board())
+        self.player_win.add(f'{len(self.player_grid.ships)} ships afloat\n')
         self.header.update(take_aim_a())
-        self.cpu_win.add("~~BATTLEFIELD~~\n")
-        self.cpu_win.add(f'{len(self.cpu_grid.ships)} ships afloat\n')
         self.cpu_win.update(self.cpu_grid.display_game_board())
+        self.cpu_win.add(f'{len(self.cpu_grid.ships)} ships afloat\n')
         curses.curs_set(1)
         pos = self.get_position_input('Enter position to fire : ')
         row = pos[0]
@@ -141,12 +135,10 @@ class Game:
             result = self.cpu_grid.query_position(row, column)
             if result == 'S':    
                 self.cpu_grid.change_grid(row, column, '💥')
-                self.cpu_win.add("~~BATTLEFIELD~~\n")
                 self.cpu_win.update(self.cpu_grid.display_game_board())
                 self.header.update(hit_a())
             else:
                 self.cpu_grid.change_grid(row, column, '💦')
-                self.cpu_win.add("~~BATTLEFIELD~~\n")
                 self.cpu_win.update(self.cpu_grid.display_game_board())
                 self.header.update(miss_a())
             sleep(1)
@@ -172,12 +164,10 @@ class Game:
             result = self.player_grid.query_position(row, column)
             if result == 'S':
                 self.player_grid.change_grid(row, column, '💥')
-                self.player_win.add("~~HARBOR~~\n")
                 self.player_win.update(self.player_grid.display_game_board())
                 self.header.update(hit_a())
             else:
                 self.player_grid.change_grid(row, column, '💦')
-                self.player_win.add("~~HARBOR~~\n")
                 self.player_win.update(self.player_grid.display_game_board())
                 self.header.update(safe_a())
             sleep(1)
