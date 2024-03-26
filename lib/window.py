@@ -22,4 +22,11 @@ class Window:
        self.add_queue += string
 
     def get_input(self):
-        return self.w.getstr()
+        """Return input as str
+        
+        curses .getstr() method returns a string of ASCII codes (a 'byte-object')"""
+        value = self.w.getstr()
+        return_char = ''
+        for num in value:
+            return_char += chr(num)
+        return return_char

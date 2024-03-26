@@ -134,21 +134,3 @@ class Grid:
             """Return the current value for a grid position"""
             return self.state[self.row_dict[row]][int(column) - 1]
     
-
-
-
-# player_grid = Grid()
-# cpu_grid = Grid()
-
-# # Place ships for the CPU
-# cpu_grid.cpu_ship_placement()
-
-# # Display player's grid
-# print("Player's Grid:")
-# player_grid.display_game_board()
-
-# # Display CPU's grid
-# print("\nCPU's Grid:")
-# cpu_grid.display_game_board()
-
-# # print(cpu_grid)

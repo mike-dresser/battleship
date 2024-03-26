@@ -44,13 +44,13 @@ class Game:
                 self.take_player_shot()
 
                 if not self.battle_on(self.cpu_grid):
-                    self.user_msg.update("Congratulations! You win!\n\n")
+                    self.user_msg.add("Congratulations! You win!\n\n")
 
                     break
 
                 self.take_cpu_shot()
                 if not self.battle_on(self.player_grid):
-                    self.user_msg.update("Sorry, you lose!")
+                    self.user_msg.add("Sorry, you lose!")
                     break
             
         
@@ -92,10 +92,6 @@ class Game:
             self.user_msg.update(message)
             curses.echo()
             value = self.user_msg.get_input()
-            return_char = ''
-            for num in value:
-                return_char += chr(num)
-            value = return_char
             result = ''
             try:
                 if value.upper() == 'XX':
