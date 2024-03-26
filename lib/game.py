@@ -9,6 +9,7 @@ from assets import *
 class Game:
     """Class to represent the current game"""
 
+
     def __init__(self, stdscr):
         """Main class to control gameplay
         
@@ -20,7 +21,11 @@ class Game:
         self.user_msg = Window(5, 80, curses.LINES - 5, 1)
         self.player_win = Window(15, 20, 11, 3)
         self.cpu_win = Window(15, 20, 11, 35)
-            
+    
+    def draw_quit_message(self):
+        """Draws the quit message on the screen"""
+        self.stdscr.addstr(curses.LINES - 3, 0, "Press 'Q' to quit")
+
     def play(self):
         """Begin new game"""
         play_again = True
@@ -44,13 +49,13 @@ class Game:
                 self.take_player_shot()
 
                 if not self.battle_on(self.cpu_grid):
-                    self.user_msg.update("Congratulations! You win!\n\n")
+                    self.user_msg.update(victory_a())
 
                     break
 
                 self.take_cpu_shot()
                 if not self.battle_on(self.player_grid):
-                    self.user_msg.update("Sorry, you lose!")
+                    self.user_msg.update(game_over_a())
                     break
             
         
