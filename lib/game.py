@@ -1,4 +1,3 @@
-import sys
 from grid import Grid
 from window import Window
 import random
@@ -20,6 +19,7 @@ class Game:
         self.user_msg = Window(5, 80, curses.LINES - 5, 1)
         self.player_win = Window(15, 20, 11, 3)
         self.cpu_win = Window(15, 20, 11, 35)
+        self.ship_length = 2
             
     def play(self):
         """Begin new game"""
@@ -64,13 +64,15 @@ class Game:
         """Place player ships"""
         placed_ships = 0
         while placed_ships < 3:
-            self.user_msg.add('Begin by placing your 1x1 ships on the game board.\n')
-            self.user_msg.update(f'*** {3 - placed_ships} ships remaining ***\n')
+            self.user_msg.add('Begin by placing your 1x2 ships on the game board.\n')
+            self.user_msg.add(f'*** {3 - placed_ships} ships remaining ***\n')
             pos = self.get_position_input('Position for your ship (i.e. "B2") ')
-            if self.player_grid.query_position(pos[0], pos[1]) == 'S':
-                self.user_msg.update('Cannot place a ship on top of another!\n')
+            if not self.player_grid.valid_ship_placement(pos, self.ship_length):
+                curses.curs_set(0) #hide cursor while drawing headers
+                self.user_msg.update('The ship cannot fit here!\nPress any key to try again...')
+                self.player_win.get_input()
                 continue
-            self.player_grid.place_ship(pos[0], pos[1])
+            self.player_grid.place_ship(pos)
             placed_ships += 1
             self.player_win.add("~~HARBOR~~\n")
             self.player_win.update(self.player_grid.display_game_board())

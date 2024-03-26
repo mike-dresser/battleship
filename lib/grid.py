@@ -18,8 +18,8 @@ class Grid:
     """
 
     def __init__(self) -> None:
-        self.state = type(self).reset_grid()
-        self.column_labels = ['1', '2', '3', '4', '5']
+        self.state = Grid.reset_grid()
+        self.column_labels = ['1', '2', '3', '4', '5'] # subtracting 1 gets the sub-list index
         self.row_labels = ['A', 'B', 'C', 'D', 'E']
         self.row_dict = { 'A': 0,'B': 1,'C': 2,'D': 3,'E': 4} # convert row letters to indexes
         self.x_ray = True #show ship positions
@@ -36,7 +36,25 @@ class Grid:
                 ]
         return grid
     
-    def place_ship(self, row, column):
+    def valid_ship_placement(self, coord, length):
+        """Return whether the ship can be placed without overlapping another or leaving the board.
+         
+        Parameters:
+            coord (str): point marking the prow of the ship ("A1")
+            length (int): global ship length defined in Game
+        Return:
+            Boolean (True == valid)
+            """
+        row, column = coord[0], coord[1]
+        for i in range(length):
+            if self.row_dict[row] + i > 4:
+                return False
+            if self.state[self.row_dict[row] + i][int(column) - 1] == 'S':
+                return False
+        return True        
+
+    
+    def place_ship(self, start_coords):
         """Place a ship on game grid
         
         Parameters:
@@ -46,7 +64,11 @@ class Grid:
         Return:
             None
         """
-        self.state[self.row_dict[row]][int(column) - 1] = 'S'
+        coords =[start_coords,
+                self.row_labels[self.row_dict[start_coords[0]] + 1 ] + start_coords[1]
+        ]
+        for [row, column] in coords:
+            self.state[self.row_dict[row]][int(column) - 1] = 'S'
 
     def display_game_board(self):
         """Render game grid with column and row labels as a text block"""     
@@ -103,8 +125,9 @@ class Grid:
         while placed_ships < total_ships:
             row = random.choice(self.row_labels)
             column = random.choice(self.column_labels)
-            if self.state[self.row_dict[row]][int(column) - 1] != 'S':
-                self.place_ship(row, column)
+            # hard-coding ship length below for now, user ship placement is called from Game where length is store, but CPU placement is here
+            if self.valid_ship_placement(row + column, 2):
+                self.place_ship(row + column)
                 placed_ships += 1
 
     def query_position(self, row, column):
