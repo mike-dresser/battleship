@@ -8,6 +8,7 @@ from assets import *
 class Game:
     """Class to represent the current game"""
 
+
     def __init__(self, stdscr):
         """Main class controlling gameplay
         
@@ -19,8 +20,12 @@ class Game:
         self.user_msg = Window(4, 80, curses.LINES - 4, 1)
         self.player_win = Window(15, 20, 11, 3, "    ~~HARBOR~~\n")
         self.cpu_win = Window(15, 20, 11, 35, "  ~~BATTLEFIELD~~\n")
-        self.ship_length = 2
-            
+        self.ship_length = 1
+    
+    def draw_quit_message(self):
+        """Draws the quit message on the screen"""
+        self.stdscr.addstr(curses.LINES - 3, 0, "Press 'Q' to quit")
+
     def play(self):
         """Begin new game
         
@@ -39,6 +44,7 @@ class Game:
             self.take_player_shot()
 
             if not self.battle_on(self.cpu_grid):
+                self.header.update(victory_a())
                 self.user_msg.add("Congratulations! You win!\n\n")
 
                 break
@@ -131,19 +137,20 @@ class Game:
         ### the following code is repeteded in take_cpu_shot, we can probably refactor this ###
         else:
             result = self.cpu_grid.fire_on(row, column)
+            outgoing(self.header)
             if result == 'S':    
                 self.header.update(hit_a())
             else:
                 self.header.update(miss_a())
-            self.cpu_win.update(self.cpu_grid.display_game_board())
-            sleep(1)
+            sleep(2)
 
     def take_cpu_shot(self):
-            curses.curs_set(0) #hide cursor while drawing headers
-            self.header.update(under_fire_a())
-            sleep(1)
             self.header.update(take_cover_a())
-            sleep(1)
+            sleep(2)
+            curses.curs_set(0) #hide cursor while drawing headers
+            incoming(self.header)
+            sleep(2)
+
             
             """CPU shot - random position"""
             while True:
@@ -158,10 +165,10 @@ class Game:
             result = self.player_grid.fire_on(row, column)
             if result == 'S':
                 self.header.update(hit_a())
+                sleep(2)
             else:
                 self.header.update(safe_a())
-            self.player_win.update(self.player_grid.display_game_board())
-            sleep(1)
+            sleep(2)
     
     def battle_on(self, grid):
     #  """Check for ships on grid. If no ships on either grid, battle over"""

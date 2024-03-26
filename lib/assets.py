@@ -1,4 +1,7 @@
-
+import curses
+from curses import wrapper
+import time
+from window import Window
 
 def logo_a():
         return ''' 
@@ -64,11 +67,11 @@ def safe_a():
 def under_fire_a():
         return '''
                     _  _ _  _ ___  ____ ____        
-            ☄️       |  | |\ | |  \ |___ |__/        
+                    |  | |\ | |  \ |___ |__/        
                     |__| | \| |__/ |___ |  \                        
                         ____  _ ____ ____      
                         |___  | |__/ |___      
-                        |     | |  \ |___    ☄️  ☄️   
+                        |     | |  \ |___       
             ________________________________________
                                 
 '''
@@ -96,11 +99,87 @@ def victory_a():
                                       
 '''
 
+def bombs_away_a():
+        return '''
+                        ___  ____  __  ______  ____
+                       / _ )/ __ \/  |/  / _ )/ __/
+                      / _  / /_/ / /|_/ / _  |\ \  
+                     /____/\____/_/__/_/____/___/__
+                        / _ | | /| / / _ \ \/ /  / /
+                       / __ | |/ |/ / __ |\  /  /_/ 
+                      /_/ |_|__/|__/_/ |_|/_/  (_)  
+                ________________________________________
+'''
 
-logo_a()
-take_aim_a()
-hit_a()
-miss_a()
-take_cover_a()
-safe_a()
+
+# def main(stdscr):
+#     curses.curs_set(0)  
+#     stdscr.clear()
+#     stdscr.addstr(0, 0, bombs_away_a() )
+#     stdscr.refresh()
+
+#     progress = 0.0
+#     while progress <= 1.0:
+#         incoming(stdscr, progress)
+#         progress += 0.1
+#         time.sleep(0.5)  
+    
+#     progress = 1.0
+#     while progress >= 0.0:
+#         outgoing(stdscr, progress)
+#         time.sleep(0.5)
+#         progress -= 0.1
+
+
+
+
+def incoming(win):
+    progress = 0.0
+    
+    while progress <= 1.0:
+    
+        bar_width = 40
+        fill_width = int(bar_width * progress)
+        bar = '          🛳️' + ' ' * (bar_width - fill_width - 1) + '💣' + '0' * fill_width + '🛳️'
+        win.add(under_fire_a())
+        win.update(bar)
+        win.add(bar)
+      
+        progress += 0.1
+        time.sleep(0.25)  
+
+def outgoing(win):
+    progress = 1.0
+    
+    while progress >= 0.0:
+    
+        bar_width = 40
+        fill_width = int(bar_width * progress)
+        empty_width = bar_width - fill_width - 1
+        bar = '             🛳️' + '0' * empty_width + '💣' + ' ' * fill_width + '🛳️'
+        win.add(bombs_away_a())
+        win.update(bar)
+        win.add(bar)
+      
+        progress -= 0.1
+        time.sleep(0.25)  
+
+
+
+# def outgoing(stdscr, progress):
+#     stdscr.clear()
+#     stdscr.addstr(0, 0, bombs_away_a())
+#     bar_width = 40
+#     fill_width = int(bar_width * progress)
+#     empty_width = bar_width - fill_width - 1
+#     bar = '🛳️' + '0' * empty_width + '💣' + ' ' * fill_width + '🛳️'
+#     stdscr.addstr(10, 10, bar)
+#     stdscr.addstr(0, 10, bar)
+#     stdscr.refresh()
+
+#     progress = 1.0
+#     while progress >= 0.0:
+#         outgoing(stdscr, progress)
+#         time.sleep(0.5)
+#         progress -= 0.1
 
