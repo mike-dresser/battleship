@@ -16,7 +16,7 @@ class Game:
         self.player_grid = Grid() 
         self.cpu_grid = Grid() 
         self.header = Window(11, 60, 0, 0) 
-        self.user_msg = Window(5, 80, curses.LINES - 5, 1)
+        self.user_msg = Window(4, 80, curses.LINES - 4, 1)
         self.player_win = Window(15, 20, 11, 3, "    ~~HARBOR~~\n")
         self.cpu_win = Window(15, 20, 11, 35, "  ~~BATTLEFIELD~~\n")
         self.ship_length = 2
@@ -115,11 +115,11 @@ class Game:
     
     def take_player_shot(self):
         curses.curs_set(0) #hide cursor while drawing headers
-        self.player_win.update(self.player_grid.display_game_board())
-        self.player_win.add(f'{len(self.player_grid.ships)} ships afloat\n')
+        self.player_win.add(self.player_grid.display_game_board())
+        self.player_win.update(f'  {len(self.player_grid.ships)} ships afloat\n')
         self.header.update(take_aim_a())
-        self.cpu_win.update(self.cpu_grid.display_game_board())
-        self.cpu_win.add(f'{len(self.cpu_grid.ships)} ships afloat\n')
+        self.cpu_win.add(self.cpu_grid.display_game_board())
+        self.cpu_win.update(f'  {len(self.cpu_grid.ships)} ships afloat\n')
         curses.curs_set(1)
         pos = self.get_position_input('Enter position to fire : ')
         row = pos[0]
