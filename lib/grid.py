@@ -57,21 +57,23 @@ class Grid:
 
     
     def place_ship(self, start_coords):
-        """Place a ship on game grid
+        """Place a ship on game grid, create ship instance
         
         Parameters:
-            row (str):        row letter
-            column(int|str):  column number
+            start_coords (str): string like "A1." Further coordinates are calculated from this position based on ship length and orientation.
 
         Return:
             None
         """
+        # Calculate all coordinates occupied by ship
         coords =[start_coords,
                 self.row_labels[self.row_dict[start_coords[0]] + 1 ] + start_coords[1]
         ]
+        # Update grid state
         for [row, column] in coords:
             self.state[self.row_dict[row]][int(column) - 1] = 'S'
-        new = Ship(coords) #build new ship object
+        # Build new ship object
+        new = Ship(coords) 
         self.ships.append(new)
 
     def display_game_board(self):
@@ -136,3 +138,25 @@ class Grid:
             """Return the current value for a grid position"""
             return self.state[self.row_dict[row]][int(column) - 1]
     
+    def fire_on(self, row, column):
+        """Recieve fire, update grid
+        
+        Return:
+            str: 'S' | '🌊'
+            """
+        result = self.query_position(row, column)
+        if result == 'S':    
+            self.change_grid(row, column, '💥')
+            self.assign_damage(row, column)
+        else:
+            self.change_grid(row, column, '💦')
+        return result
+
+    def assign_damage(self, row, column):
+        coord = row + column
+        for ship in self.ships:
+            if ship.coords.get(coord):
+                if ship.survive_hit(coord):
+                    return
+                else:
+                    self.ships.remove(ship)
