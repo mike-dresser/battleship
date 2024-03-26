@@ -3,7 +3,8 @@ from ship import Ship
 
 class Grid:
 
-    SHIP_SIZE = 4
+    SHIP_SIZE = 1
+
     """
     The game grid is represented as a list of lists,
     with each sub-list as a row. An individual cell

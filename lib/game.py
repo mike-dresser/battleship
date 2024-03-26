@@ -138,6 +138,7 @@ class Game:
         else:
             result = self.cpu_grid.fire_on(row, column)
             outgoing(self.header)
+            self.cpu_win.update(self.cpu_grid.display_game_board())
             if result == 'S':    
                 self.header.update(hit_a())
             else:
@@ -163,6 +164,8 @@ class Game:
                     break
             
             result = self.player_grid.fire_on(row, column)
+            self.player_win.update(self.player_grid.display_game_board())
+
             if result == 'S':
                 self.header.update(hit_a())
                 sleep(2)
