@@ -130,15 +130,12 @@ class Game:
         
         ### the following code is repeteded in take_cpu_shot, we can probably refactor this ###
         else:
-            result = self.cpu_grid.query_position(row, column)
+            result = self.cpu_grid.fire_on(row, column)
             if result == 'S':    
-                self.cpu_grid.change_grid(row, column, '💥')
-                self.cpu_win.update(self.cpu_grid.display_game_board())
                 self.header.update(hit_a())
             else:
-                self.cpu_grid.change_grid(row, column, '💦')
-                self.cpu_win.update(self.cpu_grid.display_game_board())
                 self.header.update(miss_a())
+            self.cpu_win.update(self.cpu_grid.display_game_board())
             sleep(1)
 
     def take_cpu_shot(self):
@@ -158,15 +155,12 @@ class Game:
                 else:
                     break
             
-            result = self.player_grid.query_position(row, column)
+            result = self.player_grid.fire_on(row, column)
             if result == 'S':
-                self.player_grid.change_grid(row, column, '💥')
-                self.player_win.update(self.player_grid.display_game_board())
                 self.header.update(hit_a())
             else:
-                self.player_grid.change_grid(row, column, '💦')
-                self.player_win.update(self.player_grid.display_game_board())
                 self.header.update(safe_a())
+            self.player_win.update(self.player_grid.display_game_board())
             sleep(1)
     
     def battle_on(self, grid):
