@@ -1,4 +1,5 @@
 import random
+from ship import Ship
 
 class Grid:
     """
@@ -23,6 +24,7 @@ class Grid:
         self.row_labels = ['A', 'B', 'C', 'D', 'E']
         self.row_dict = { 'A': 0,'B': 1,'C': 2,'D': 3,'E': 4} # convert row letters to indexes
         self.x_ray = True #show ship positions
+        self.ships = []
 
     @classmethod
     def reset_grid(cls):
@@ -69,6 +71,8 @@ class Grid:
         ]
         for [row, column] in coords:
             self.state[self.row_dict[row]][int(column) - 1] = 'S'
+        new = Ship(coords) #build new ship object
+        self.ships.append(new)
 
     def display_game_board(self):
         """Render game grid with column and row labels as a text block"""     

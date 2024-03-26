@@ -123,9 +123,11 @@ class Game:
     def take_player_shot(self):
         curses.curs_set(0) #hide cursor while drawing headers
         self.player_win.add("~~HARBOR~~\n")
+        self.player_win.add(f'{len(self.player_grid.ships)} ships afloat\n')
         self.player_win.update(self.player_grid.display_game_board())
         self.header.update(take_aim_a())
         self.cpu_win.add("~~BATTLEFIELD~~\n")
+        self.cpu_win.add(f'{len(self.cpu_grid.ships)} ships afloat\n')
         self.cpu_win.update(self.cpu_grid.display_game_board())
         curses.curs_set(1)
         pos = self.get_position_input('Enter position to fire : ')
