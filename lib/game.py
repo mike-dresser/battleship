@@ -74,7 +74,7 @@ class Game:
                 self.user_msg.update('The ship cannot fit here!\nPress any key to try again...')
                 self.player_win.get_input()
                 continue
-            self.player_grid.place_ship(pos)
+            self.player_grid.place_ship(pos, horizontal)
             placed_ships += 1
             self.player_win.update(self.player_grid.display_game_board())
         self.ships_placed = True

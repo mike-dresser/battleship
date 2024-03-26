@@ -52,15 +52,24 @@ class Grid:
             """
         row, column = coord[0], coord[1]
         if not horizontal:
+            #check vertical alignment
             for i in range(length):
                 if self.row_dict[row] + i > 4:
                     return False
                 if self.state[self.row_dict[row] + i][int(column) - 1] == 'S':
                     return False
             return True        
+        else:
+            # Check horizontal alignment
+            for i in range(length):
+                if int(column) + i > 5:
+                    return False
+                if self.state[self.row_dict[row]][int(column) - 1 + i] == 'S':
+                    return False
+            return True        
 
     
-    def place_ship(self, start_coords):
+    def place_ship(self, start_coords, horizontal):
         """Place a ship on game grid, create ship instance
         
         Parameters:
@@ -73,8 +82,12 @@ class Grid:
         coords =[start_coords]
         count = 1
         while count < Grid.SHIP_SIZE:
-            coords.append(self.row_labels[self.row_dict[start_coords[0]] + count ] + start_coords[1])
-            count += 1
+            if not horizontal:
+                coords.append(self.row_labels[self.row_dict[start_coords[0]] + count ] + start_coords[1])
+                count += 1
+            else:
+                coords.append(start_coords[0] + str(int(start_coords[1]) + count))
+                count += 1
     
         # Update grid state
         for coord in coords:
@@ -142,7 +155,7 @@ class Grid:
             horizontal = random.choice([True, False])
             # hard-coding ship length below for now, user ship placement is called from Game where length is store, but CPU placement is here
             if self.valid_ship_placement(row + column, horizontal, Grid.SHIP_SIZE):
-                self.place_ship(row + column)
+                self.place_ship(row + column, horizontal)
                 placed_ships += 1
 
     def query_position(self, row, column):
