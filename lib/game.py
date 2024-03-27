@@ -30,7 +30,11 @@ class Game:
         """Begin new game
         
         Return True to play again, False to exit."""
-        self.header.update(logo_a())
+        # curses.start_color()
+        # curses.curs_set(0)
+        # curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK) 
+
+        self.header.update(logo_a(), 6)
         self.player_win.update(self.player_grid.display_game_board())
         self.cpu_win.update(self.cpu_grid.display_game_board())
 
@@ -44,7 +48,7 @@ class Game:
             self.take_player_shot()
 
             if not self.battle_on(self.cpu_grid):
-                self.header.update(victory_a())
+                self.header.update(victory_a(),5)
                 self.user_msg.add("Congratulations! You win!\n\n")
 
                 break
@@ -68,7 +72,10 @@ class Game:
             self.user_msg.add('Begin by placing your ships in the harbor.\n')
             self.user_msg.add(f'*** {3 - placed_ships} ships remaining ***\n')
             pos = self.get_position_input('Position for your ship (i.e. "B2") ')
-            horizontal = self.get_orientation(f'Position: {pos}\nOrientation: [H]orizontal or [V]ertical? ')
+            if Grid.SHIP_SIZE > 1:
+                 horizontal = self.get_orientation(f'Position: {pos}\nOrientation: [H]orizontal or [V]ertical? ')
+            else:
+                horizontal = True
             if not self.player_grid.valid_ship_placement(pos, horizontal, Grid.SHIP_SIZE):
                 curses.curs_set(0) #hide cursor while drawing headers
                 self.user_msg.update('The ship cannot fit here!\nPress any key to try again...')
@@ -146,7 +153,7 @@ class Game:
         curses.curs_set(0) #hide cursor while drawing headers
         self.player_win.add(self.player_grid.display_game_board())
         self.player_win.update(f'  {len(self.player_grid.ships)} ships afloat\n')
-        self.header.update(take_aim_a())
+        self.header.update(take_aim_a(),5)
         self.cpu_win.add(self.cpu_grid.display_game_board())
         self.cpu_win.update(f'  {len(self.cpu_grid.ships)} ships afloat\n')
         curses.curs_set(1)
@@ -163,13 +170,13 @@ class Game:
             outgoing(self.header)
             self.cpu_win.update(self.cpu_grid.display_game_board())
             if result == 'S':    
-                self.header.update(hit_a())
+                self.header.update(hit_a(),1)
             else:
-                self.header.update(miss_a())
+                self.header.update(miss_a(),2)
             sleep(2)
 
     def take_cpu_shot(self):
-            self.header.update(take_cover_a())
+            self.header.update(take_cover_a(),5)
             sleep(2)
             curses.curs_set(0) #hide cursor while drawing headers
             incoming(self.header)
@@ -190,10 +197,10 @@ class Game:
             self.player_win.update(self.player_grid.display_game_board())
 
             if result == 'S':
-                self.header.update(hit_a())
+                self.header.update(hit_a(),1)
                 sleep(2)
             else:
-                self.header.update(safe_a())
+                self.header.update(safe_a(),5)
             sleep(2)
     
     def battle_on(self, grid):
