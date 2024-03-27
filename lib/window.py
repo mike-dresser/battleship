@@ -19,17 +19,31 @@ class Window:
         self.w = curses.newwin(height, width, begin_y, begin_x)
         self.header = header
         self.add_queue = '' # queue to add when updating
-    
-    def update(self, string=''):
+        self.w.box() 
+        curses.start_color()
+        curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+        curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK)
+        curses.init_pair(3, curses.COLOR_BLUE, curses.COLOR_WHITE)
+        curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_RED)
+        curses.init_pair(5, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+        curses.init_pair(6, curses.COLOR_GREEN, curses.COLOR_BLACK)
+
+
+    def update(self, string='',color_pair = 0):
         """Update curses window with header, queue contents, and parameter str passed in (all optional)"""
         self.w.clear()
-        self.w.addstr(self.header)
-        self.w.addstr(self.add_queue)
-        self.w.addstr(string)
+        curses.start_color()
+        curses.curs_set(0)
+        # self.w.box() 
+        curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+        self.w.addstr(self.header, curses.color_pair(color_pair))
+        self.w.addstr(self.add_queue, curses.color_pair(color_pair))
+        self.w.addstr(string, curses.color_pair(color_pair))
         self.w.refresh()
         self.add_queue = ''
+        
 
-    def add(self, string):
+    def add(self, string,):
         """Add string to queue, but don't update."""
         self.add_queue += string
 

@@ -18,24 +18,30 @@ def update_leaderboard(initials, score):
 def get_leaderboard():
     conn = sqlite3.connect('high_score.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM LeaderBoard ORDER BY score DESC")
+    cursor.execute("SELECT initials, score FROM LeaderBoard ORDER BY score ASC LIMIT 3")
     leaderboard = cursor.fetchall()
-    conn.close()
-    return leaderboard
-
-def main():
-    create_table()
-
-    # Example usage:
-    # Update the database with new initials and score
-    update_leaderboard('AB', 100)
-    update_leaderboard('CD', 150)
-
-    # Get the entire leaderboard sorted by score in descending order
-    leaderboard = get_leaderboard()
-    print("Leaderboard (sorted by score in descending order):")
+    result = "LEADERBOARD \n"
     for row in leaderboard:
-        print(row)
+        for item in row:
+            result += " "  * (5 - len(str(item))) + str(item) 
+        result += " shots \n"      
+    conn.close()
+    
+    return result + "\n"
 
-if __name__ == "__main__":
-    main()
+# def main():
+#     create_table()
+
+#     # Example usage:
+#     # Update the database with new initials and score
+#     update_leaderboard('AB', 100)
+#     update_leaderboard('CD', 150)
+
+#     # Get the entire leaderboard sorted by score in descending order
+#     leaderboard = get_leaderboard()
+#     print("Leaderboard (sorted by score in descending order):")
+#     for row in leaderboard:
+#         print(row)
+
+# if __name__ == "__main__":
+#     main()
