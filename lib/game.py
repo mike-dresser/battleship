@@ -17,10 +17,11 @@ class Game:
         self.player_grid = Grid() 
         self.cpu_grid = Grid() 
         self.header = Window(11, 60, 0, 0) 
-        self.user_msg = Window(4, 80, curses.LINES - 4, 1)
-        self.player_win = Window(15, 20, 11, 3, "    ~~HARBOR~~\n")
-        self.cpu_win = Window(15, 20, 11, 35, "  ~~BATTLEFIELD~~\n")
-        # self.ship_length = 1
+        # self.header.border()
+        self.user_msg = Window(6, 40, 21, 6)
+        self.player_win = Window(10, 19, 11, 5, "    ~~HARBOR~~\n")
+        self.cpu_win = Window(10, 19, 11, 35, "  ~~BATTLEFIELD~~\n")
+        self.player_shot = 0# self.ship_length = 1
     
     def draw_quit_message(self):
         """Draws the quit message on the screen"""
@@ -49,7 +50,7 @@ class Game:
 
             if not self.battle_on(self.cpu_grid):
                 self.header.update(victory_a(),5)
-                self.user_msg.add("Congratulations! You win!\n\n")
+                self.user_msg.add(f"Congratulations! You won in {self.player_shot} shots!\n\n")
 
                 break
 
@@ -167,6 +168,7 @@ class Game:
         ### the following code is repeteded in take_cpu_shot, we can probably refactor this ###
         else:
             result = self.cpu_grid.fire_on(row, column)
+            self.player_shot += 1
             outgoing(self.header)
             self.cpu_win.update(self.cpu_grid.display_game_board())
             if result == 'S':    

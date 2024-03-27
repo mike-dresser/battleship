@@ -19,6 +19,7 @@ class Window:
         self.w = curses.newwin(height, width, begin_y, begin_x)
         self.header = header
         self.add_queue = '' # queue to add when updating
+        self.w.box() 
         curses.start_color()
         curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
         curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK)
@@ -34,6 +35,7 @@ class Window:
         curses.start_color()
         curses.curs_set(0)
         curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+        self.w.box() 
         self.w.addstr(self.header, curses.color_pair(color_pair))
         self.w.addstr(self.add_queue, curses.color_pair(color_pair))
         self.w.addstr(string, curses.color_pair(color_pair))
