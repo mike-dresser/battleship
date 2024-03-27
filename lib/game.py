@@ -4,6 +4,7 @@ import random
 from time import sleep
 import curses
 from assets import *
+from high_score_db import *
 
 class Game:
     """Class to represent the current game"""
@@ -60,6 +61,12 @@ class Game:
         if play_again_input.lower() != 'p':
            return False 
         return True
+   
+    def get_player_info(self):
+        self.user_msg.add("Congratulations! You win!\n\n")
+        self.user_msg.update("Add your initials to the leaderboard!")
+        player_init = self.user_msg.get_input()
+        update_leaderboard(player_init, pl)
 
     def place_ships(self):
         """Place player ships"""

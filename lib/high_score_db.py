@@ -23,19 +23,19 @@ def get_leaderboard():
     conn.close()
     return leaderboard
 
-def main():
-    create_table()
+# def main():
+#     create_table()
 
-    # Example usage:
-    # Update the database with new initials and score
-    update_leaderboard('AB', 100)
-    update_leaderboard('CD', 150)
+#     # Example usage:
+#     # Update the database with new initials and score
+#     update_leaderboard('AB', 100)
+#     update_leaderboard('CD', 150)
 
-    # Get the entire leaderboard sorted by score in descending order
-    leaderboard = get_leaderboard()
-    print("Leaderboard (sorted by score in descending order):")
-    for row in leaderboard:
-        print(row)
+#     # Get the entire leaderboard sorted by score in descending order
+#     leaderboard = get_leaderboard()
+#     print("Leaderboard (sorted by score in descending order):")
+#     for row in leaderboard:
+#         print(row)
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
