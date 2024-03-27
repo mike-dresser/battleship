@@ -157,7 +157,7 @@ def incoming(win):
         win.add(bar)
       
         progress += 0.1
-        time.sleep(0.25)  
+        time.sleep(0.05)  
 
 def outgoing(win):
     progress = 1.0
@@ -173,7 +173,7 @@ def outgoing(win):
         win.add(bar)
       
         progress -= 0.1
-        time.sleep(0.25)  
+        time.sleep(0.05)  
 
 
 

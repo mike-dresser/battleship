@@ -18,10 +18,16 @@ def update_leaderboard(initials, score):
 def get_leaderboard():
     conn = sqlite3.connect('high_score.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM LeaderBoard ORDER BY score DESC")
+    cursor.execute("SELECT initials, score FROM LeaderBoard ORDER BY score ASC LIMIT 3")
     leaderboard = cursor.fetchall()
+    result = "LEADERBOARD \n"
+    for row in leaderboard:
+        for item in row:
+            result += " "  * (5 - len(str(item))) + str(item) 
+        result += " shots \n"      
     conn.close()
-    return leaderboard
+    
+    return result + "\n"
 
 # def main():
 #     create_table()

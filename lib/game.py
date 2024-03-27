@@ -5,6 +5,7 @@ from time import sleep
 import curses
 from assets import *
 from high_score_db import *
+import sqlite3
 
 class Game:
     """Class to represent the current game"""
@@ -19,7 +20,7 @@ class Game:
         self.cpu_grid = Grid() 
         self.header = Window(11, 60, 0, 0) 
         # self.header.border()
-        self.user_msg = Window(6, 40, 21, 6)
+        self.user_msg = Window(6, 55, 21, 6)
         self.player_win = Window(10, 19, 11, 5, "    ~~HARBOR~~\n")
         self.cpu_win = Window(10, 19, 11, 35, "  ~~BATTLEFIELD~~\n")
         self.player_shot = 0# self.ship_length = 1
@@ -52,7 +53,7 @@ class Game:
             if not self.battle_on(self.cpu_grid):
                 self.header.update(victory_a(),5)
                 self.user_msg.add(f"Congratulations! You won in {self.player_shot} shots!\n\n")
-
+                self.get_player_info()
                 break
 
             self.take_cpu_shot()
@@ -60,7 +61,8 @@ class Game:
                 self.user_msg.add("Sorry, you lose!")
                 break
         
-    
+        self.user_msg.add(get_leaderboard())
+            
         self.user_msg.update("Press 'P' to play again, or any other key to exit: ")
         play_again_input = self.user_msg.get_input()
         if play_again_input.lower() != 'p':
@@ -71,7 +73,7 @@ class Game:
         self.user_msg.add("Congratulations! You win!\n\n")
         self.user_msg.update("Add your initials to the leaderboard!")
         player_init = self.user_msg.get_input()
-        update_leaderboard(player_init, pl)
+        update_leaderboard(player_init, self.player_shot)
 
     def place_ships(self):
         """Place player ships"""
