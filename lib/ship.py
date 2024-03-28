@@ -1,6 +1,7 @@
+
 class Ship:
 
-    def __init__(self, coords):
+    def __init__(self, coords, grid_ref):
         """Tracks ship position and damage
        
         Parameters:
@@ -8,6 +9,7 @@ class Ship:
                             (i.e. [A2, A3, A4])
             """
         self.coords = self.build(coords)
+        self.grid = grid_ref
 
     def build(self, coords):
         """Initialize dict of ship coordinates and health status 
@@ -26,9 +28,12 @@ class Ship:
         Return:
             bool:   True == not sunk
             """
+        from grid import Grid
         self.coords[location] = 'x'
         # Check self to see if undamaged spots remain
         for coord in self.coords:
             if self.coords[coord] == 'S':
                 return True
+        for pos in self.coords:
+            self.grid.change_grid(pos[0], pos[1], '👻')
         return False

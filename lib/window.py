@@ -43,7 +43,7 @@ class Window:
         self.add_queue = ''
         
 
-    def add(self, string,):
+    def add(self, string, color_pair=0):
         """Add string to queue, but don't update."""
         self.add_queue += string
 
