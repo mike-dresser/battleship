@@ -70,8 +70,9 @@ class Game:
         return True
    
     def get_player_info(self):
-        self.user_msg.add("Congratulations! You win!\n\n")
-        self.user_msg.update("Add your initials to the leaderboard!")
+        # self.user_msg.add("Congratulations! You win!\n\n")
+        self.user_msg.update("Add your initials to the leaderboard! ")
+        curses.curs_set(1)
         player_init = self.user_msg.get_input()
         update_leaderboard(player_init, self.player_shot)
 
@@ -171,6 +172,7 @@ class Game:
         row = pos[0]
         column = pos[1]
         curses.curs_set(0) #hide cursor while drawing headers
+        
         if self.cpu_grid.query_position(row, column) in ['H', 'M']:
             self.user_msg.add('Already fired at this position. Try again!')
         
@@ -180,18 +182,19 @@ class Game:
             self.player_shot += 1
             outgoing(self.header)
             self.cpu_win.update(self.cpu_grid.display_game_board())
+            self.header.update('')
             if result == 'S':    
                 self.header.update(hit_a(),1)
             else:
                 self.header.update(miss_a(),2)
-            sleep(2)
+            sleep(1.5)
 
     def take_cpu_shot(self):
             self.header.update(take_cover_a(),5)
             sleep(2)
             curses.curs_set(0) #hide cursor while drawing headers
             incoming(self.header)
-            sleep(2)
+            sleep(1.5)
 
             
             """CPU shot - random position"""
@@ -209,10 +212,10 @@ class Game:
 
             if result == 'S':
                 self.header.update(hit_a(),1)
-                sleep(2)
+                sleep(1.5)
             else:
                 self.header.update(safe_a(),5)
-            sleep(2)
+            sleep(1.5)
     
     def battle_on(self, grid):
     #  """Check for ships on grid. If no ships on either grid, battle over"""

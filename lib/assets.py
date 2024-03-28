@@ -123,26 +123,6 @@ def bombs_away_a():
 '''
 
 
-# def main(stdscr):
-#     curses.curs_set(0)  
-#     stdscr.clear()
-#     stdscr.addstr(0, 0, bombs_away_a() )
-#     stdscr.refresh()
-
-#     progress = 0.0
-#     while progress <= 1.0:
-#         incoming(stdscr, progress)
-#         progress += 0.1
-#         time.sleep(0.5)  
-    
-#     progress = 1.0
-#     while progress >= 0.0:
-#         outgoing(stdscr, progress)
-#         time.sleep(0.5)
-#         progress -= 0.1
-
-
-
 
 def incoming(win):
     progress = 0.0
@@ -152,12 +132,12 @@ def incoming(win):
         bar_width = 40
         fill_width = int(bar_width * progress)
         bar = '      🛳️' + ' ' * (bar_width - fill_width - 1) + '💣' + '0' * fill_width + '🛳️'
+        win.add(bar)
         win.add(under_fire_a())
         win.update(bar,1)
-        win.add(bar)
       
         progress += 0.1
-        time.sleep(0.05)  
+        time.sleep(0.08)  
 
 def outgoing(win):
     progress = 1.0
@@ -173,7 +153,7 @@ def outgoing(win):
         win.add(bar)
       
         progress -= 0.1
-        time.sleep(0.05)  
+        time.sleep(0.08)  
 
 
 

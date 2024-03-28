@@ -3,7 +3,7 @@ from ship import Ship
 
 class Grid:
 
-    SHIP_SIZE = 1
+    SHIP_SIZE = 2
 
     """
     The game grid is represented as a list of lists,
@@ -97,7 +97,7 @@ class Grid:
 
             self.state[self.row_dict[row]][int(column) - 1] = 'S'
         # Build new ship object
-        new = Ship(coords) 
+        new = Ship(coords, self) 
         self.ships.append(new)
 
     def display_game_board(self):
@@ -117,6 +117,8 @@ class Grid:
                 else:
                     if grid_square == 'S':
                         output += '🌊 '
+                    # elif grid_square == "☠️" :
+                        # output += f'{grid_square}  '
                     else:    
                         output += f'{grid_square} '
             output += '\n' 
