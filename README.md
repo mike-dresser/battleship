@@ -14,7 +14,7 @@ A command-line implementation of the classic Mattel game, using Python, the `cur
 
 To play BitShips, clone this repository and then run `python lib/main.py` from the repository directory.
 
-**Note** _To activate the ~~cheat~~ debug mode, enter `xx` at the coordinate prompt to turn on X-ray vision and see the computer's ships._ 😎
+> **Note** _To activate the ~~cheat~~ debug mode, enter `xx` at the coordinate prompt to turn on X-ray vision and see the computer's ships._ 😎
 
 ## Implementation
 
