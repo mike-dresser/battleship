@@ -1,59 +1,27 @@
-# Battleship
+# ~~Battleship~~ BitShips
 
-The Phase 3 project of Brent, Raff, and Mike.
+A command-line implementation of the classic Mattel game, using Python, the `curses` library, emojis and ASCII art.
 
-## File Structure
+<img src="./demo/1.png">
+<img src="./demo/3.png">
+<img src="./demo/4.png">
+<img src="./demo/5.png">
 
-```
-lib
-   |- game.py
-   |- grid.py
-   |- main.py
-```
+## Installation
 
-Run `python lib/game.py` to start a new game.
+To play BitShips, clone this repository and then run `python lib/main.py` from the repository directory.
 
-## Classes
+**Note** _To activate the ~~cheat~~ debug mode, enter `xx` at the coordinate prompt to turn on X-ray vision and see the computer's ships._ 😎
 
-A `Game` instance is created to store game scores and move players through the their turns.
+## Implementation
 
-A `Grid` instance is created for both the player and the computer to store the state of their individual game boards.
+A `Game` class instance is created to store the game score and order player turns.
 
-## Project Phase 1
+`Grid` class instances are created for the player and the computer to store the state of their individual game boards. Additional methods validate initial ship positioning, and confirm hits or misses.
 
-Computer sets 1x1 ship locations, player shoots and collects hits or misses
+The `Window` class provides a wrapper of the `curses` terminal rendering library, exposing the core functionality as class methods.
 
-## Project Phase 2
+## Future Goals
 
-MVP :
-Ships = 3
-Ship size 1x1
-
-Computer sets ship’s location (random)
-User sets their ships / x & y
-
-SCORE DISPLAY:
-Opponent ships: 3 of 3
-My ships: 3 of 3
-
-FIRE
-User sets target/x and y
-If ship in target
-print(‘target hit’) / change grid square
-
-Update Opponent ship count
-
-Computer returns Fire
-Random to start.
-
-If Player ship count reaches zero
-Print Game Over
-
-If Opponent ship count reaches zero
-Print Victory
-
-## Project Phase 3
-
-- Support multiple sizes of ships (1x3, 1x4, 1x5)
-- Ships may be oriented on board horizontally or vertically
-- Improve computer play logic
+- Support multiple ship sizes (1x3, 1x4, 1x5)
+- Improve computer play logic (currently randomized shots)
