@@ -1,11 +1,14 @@
 # ~~Battleship~~ BitShips
+[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 
 A command-line implementation of the classic Mattel game, using Python, the `curses` library, emojis and ASCII art.
 
+<div align="center">
 <img src="./demo/1.png">
 <img src="./demo/3.png">
 <img src="./demo/4.png">
 <img src="./demo/5.png">
+</div>
 
 ## Installation
 
